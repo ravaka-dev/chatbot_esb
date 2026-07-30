@@ -9,6 +9,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@ai-sdk/react": "^4.0.43",
     "@radix-ui/react-use-controllable-state": "^1.2.6",
     "@rive-app/react-webgl2": "^4.30.0",
     "@streamdown/cjk": "^1.0.3",
@@ -31,6 +32,7 @@
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-jsx-parser": "^2.4.1",
+    "root": "git+https://github.com/tanstack/react-query.git",
     "shadcn": "^4.15.0",
     "shiki": "^4.3.1",
     "streamdown": "^2.5.0",
