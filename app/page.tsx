@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ChatWidget } from "@/components/chat/ChatWidget";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 export const metadata: Metadata = {
 	title: "ESB — Assistant SEO & GEO pour votre site web",
