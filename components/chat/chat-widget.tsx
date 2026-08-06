@@ -2,7 +2,7 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useState } from "react";
+import { useState, useMemo } from 'react';
 
 import { cn } from "@/lib/utils";
 import { useAutoFocus } from "@/hooks/useAutoFocus";
@@ -12,16 +12,18 @@ import { ChatHeader } from "./chat-header";
 import { ChatInputForm } from "./chat-input-form";
 import { ChatMessageList } from "./chat-message-list";
 import { ChatTriggerButton } from "./chat-trigger-button";
+import { useSession } from "@/hooks/useSession";
 
 const STORAGE_KEY = "esb-seo-chat";
 
 export function ChatWidget() {
 	const [open, setOpen] = useState(false);
 	const [input, setInput] = useState("");
+	const {sessionId , regenerate } = useSession(STORAGE_KEY);
 
 	const { messages, sendMessage, status, error, setMessages } = useChat({
 		id: STORAGE_KEY,
-		transport: new DefaultChatTransport({ api: "/api/chat" }),
+		transport: useMemo(()=>new DefaultChatTransport({ api: "/api/chat" , body: {sessionId}}),[sessionId]),
 	});
 
 	const { clear } = useChatPersistence(STORAGE_KEY, messages, setMessages);
@@ -40,6 +42,7 @@ export function ChatWidget() {
 	const reset = () => {
 		setMessages([]);
 		clear();
+		regenerate();
 		focusInput();
 	};
 

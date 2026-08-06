@@ -14,7 +14,7 @@ import { ChatSuggestions } from "./chat-suggestions";
 
 type ChatStatus = "submitted" | "streaming" | "ready" | "error";
 
-interface ChateMessageListProps {
+interface ChatMessageListProps {
 	messages: UIMessage[];
 	status: ChatStatus;
 	error: Error | undefined;
@@ -26,7 +26,7 @@ export function ChatMessageList({
 	status,
 	error,
 	onSelectSuggestion,
-}: ChateMessageListProps) {
+}: ChatMessageListProps) {
 	return (
 		<Conversation className="flex-1">
 			<ConversationContent className="gap-4">
@@ -51,7 +51,7 @@ export function ChatMessageList({
 				)}
 
 				{error && (
-					<p className="text-sm destructive">
+					<p className="text-sm text-destructive">
 						Une erreur est survenue. Merci de réessayer dans un instant.
 					</p>
 				)}
