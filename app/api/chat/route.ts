@@ -7,7 +7,7 @@ import {
 export const runtime = "nodejs";
 
 // Remplacez par l'URL de votre Webhook n8n (idéalement dans vos variables d'environnement)
-const N8N_WEBHOOK_URL = process.env.N8N_TEST_WEBHOOK_URL || ''
+const N8N_WEBHOOK_URL = process.env.N8N_TEST_WEBHOOK_URL || "";
 
 export async function POST(req: Request) {
 	const { messages, sessionId }: { messages: UIMessage[]; sessionId: string } =
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 				const response = await fetch(N8N_WEBHOOK_URL, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ session_id : sessionId, message: lastMessage }),
+					body: JSON.stringify({ session_id: sessionId, message: lastMessage }),
 				});
 
 				if (!response.ok) {
@@ -44,7 +44,8 @@ export async function POST(req: Request) {
 				writer.write({
 					type: "text-delta",
 					id,
-					delta: "Désolé, une erreur s'est produite lors du traitement de votre demande.",
+					delta:
+						"Désolé, une erreur s'est produite lors du traitement de votre demande.",
 				});
 				writer.write({ type: "text-end", id });
 			}

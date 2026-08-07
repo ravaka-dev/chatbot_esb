@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function Index() {
 	return (
-		<div className="min-h-screen bg-hero pt-4">
+		<div className="min-h-screen pt-4">
 			<ChatWidget />
 		</div>
 	);
