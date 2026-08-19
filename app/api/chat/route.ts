@@ -5,7 +5,7 @@ import {
 } from "ai";
 
 export const runtime = "nodejs";
-export const maxDuration = 600; // Ajout du timeout de 10 minutes (600 secondes)
+export const maxDuration = 300; // Ajout du timeout de 10 minutes (600 secondes)
 
 // Remplacez par l'URL de votre Webhook n8n (idéalement dans vos variables d'environnement)
 const N8N_WEBHOOK_URL = process.env.N8N_PROD_WEBHOOK_URL || "";
