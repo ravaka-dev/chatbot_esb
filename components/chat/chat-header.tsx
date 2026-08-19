@@ -18,9 +18,7 @@ export function ChatHeader({ onReset }: ChatHeaderProps) {
 				<Bot className="size-4" strokeWidth={2.6} />
 			</span>
 			<div className="min-w-0 flex-1">
-				<p className="truncate font-display text-sm font-semibold">
-					Ramzi AI
-				</p>
+				<p className="truncate font-display text-sm font-semibold">Ramzi AI</p>
 				<p className="truncate text-xs text-muted-foreground">
 					Votre assistant en SEO | GEO
 				</p>
