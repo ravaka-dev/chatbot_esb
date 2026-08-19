@@ -6,6 +6,9 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import Image from "next/image"
+
+import RamziImage from "@/public/icons/Avatar Ramzi.png"
 
 interface ChatHeaderProps {
 	onReset: () => void;
@@ -14,8 +17,8 @@ interface ChatHeaderProps {
 export function ChatHeader({ onReset }: ChatHeaderProps) {
 	return (
 		<header className="flex items-center gap-3 border-b border-border bg-secondary/60 px-4 py-3">
-			<span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-				<Bot className="size-4" strokeWidth={2.6} />
+			<span className="flex size-14 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+				<Image src={RamziImage} alt="Photo de Ramzi" sizes="auto"/>
 			</span>
 			<div className="min-w-0 flex-1">
 				<p className="truncate font-display text-sm font-semibold">Ramzi AI</p>
