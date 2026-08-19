@@ -19,10 +19,10 @@ export function ChatHeader({ onReset }: ChatHeaderProps) {
 			</span>
 			<div className="min-w-0 flex-1">
 				<p className="truncate font-display text-sm font-semibold">
-					ESB assistant
+					Ramzi AI
 				</p>
 				<p className="truncate text-xs text-muted-foreground">
-					ChatBot - reponse immediate
+					Votre assistant en SEO | GEO
 				</p>
 			</div>
 			<Tooltip>

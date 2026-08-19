@@ -31,12 +31,12 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 							<MessageCircle className="size-5" />
 						)}
 						<span className="ml-2 hidden sm:inline">
-							{open ? "Fermer" : "ESB Assistant"}
+							{open ? "Fermer" : "Ramzi AI"}
 						</span>
 					</Button>
 				</TooltipTrigger>
 				<TooltipContent>
-					<p>{open ? "Fermer l'assistant" : "Ouvrir l'assistant"}</p>
+					<p>{open ? "Fermer l'assistant" : "Acceder à l'assistant IA"}</p>
 				</TooltipContent>
 			</Tooltip>
 		</div>

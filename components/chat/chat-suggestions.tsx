@@ -1,8 +1,6 @@
 const SUGGESTIONS = [
-	"Comment améliorer mon SEO technique ?",
-	"C'est quoi le GEO exactement ?",
-	"Comment être cité par ChatGPT ?",
-	"Créer un agent de prospection IA pour mon entreprise",
+	"J'aimerais effectuer une analyse SEO de mon site ",
+	"Quels sont les disponibilités de vos experts pour un rendez-vous?",
 ];
 
 interface ChatSuggestionsProps {
