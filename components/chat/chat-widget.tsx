@@ -54,12 +54,12 @@ export function ChatWidget() {
 			<ChatTriggerButton open={open} onToggle={() => setOpen((v) => !v)} />
 			<div
 				className={cn(
-					"fixed bottom-24 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-float transition-all duration-200 sm:right-8",
+					"fixed bottom-26 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-float transition-all duration-200 sm:right-8",
 					open
 						? "pointer-events-auto translate-y-0 scale-100 opacity-100"
 						: "pointer-events-none translate-y-3 scale-95 opacity-0",
 				)}
-				style={{ height: "min(750px , calc(100vh - 8rem" }}
+				style={{ height: "min(650px , calc(100vh - 8rem" }}
 				role="dialog"
 				aria-label="Assistant SEO,GEO et IA ESB"
 			>

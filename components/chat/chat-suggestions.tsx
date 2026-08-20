@@ -1,6 +1,5 @@
 const SUGGESTIONS = [
-	"J'aimerais effectuer une analyse SEO de mon site ",
-	"Quels sont les disponibilités de vos experts pour un rendez-vous?",
+	"Quels sont les disponibilités , pour contacter vos experts pour un rendez-vous?",
 ];
 
 interface ChatSuggestionsProps {
@@ -10,10 +9,8 @@ interface ChatSuggestionsProps {
 export function ChatSuggestions({ onSelect }: ChatSuggestionsProps) {
 	return (
 		<div className="space-y-4 py-4">
-			<p className="text-sm text-center text-muted-foreground">
-				Bonjour 👋 Posez votre question sur le référencement de votre site :
-				audit, positionnement Google, visibilité dans les IA ou création
-				d&apos;agents de prospection IA.
+			<p className="text-sm text-muted-foreground">
+				Bonjour 👋 Je suis Ramzi, l&apos;agent IA spécialisé en SEO & GEO : je fais le point sur la visibilité de votre site et vous mets en relation avec nos spécialistes pour des conseils personnalisés et la prise de rendez-vous.
 			</p>
 			<div className="flex flex-col gap-2">
 				{SUGGESTIONS.map((s) => (

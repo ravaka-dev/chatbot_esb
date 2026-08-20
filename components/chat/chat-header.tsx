@@ -1,4 +1,4 @@
-import { Bot, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -6,9 +6,9 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Image from "next/image"
+import Image from "next/image";
 
-import RamziImage from "@/public/icons/Avatar Ramzi.png"
+import RamziImage from "@/public/icons/Avatar Ramzi.png";
 
 interface ChatHeaderProps {
 	onReset: () => void;
@@ -17,13 +17,13 @@ interface ChatHeaderProps {
 export function ChatHeader({ onReset }: ChatHeaderProps) {
 	return (
 		<header className="flex items-center gap-3 border-b border-border bg-secondary/60 px-4 py-3">
-			<span className="flex size-14 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-				<Image src={RamziImage} alt="Photo de Ramzi" sizes="auto"/>
+			<span className="flex size-12 items-center justify-center bg-transparent text-primary-foreground">
+				<Image src={RamziImage} alt="Photo de Ramzi" sizes="auto" className="object-contain rounded-full"/>
 			</span>
 			<div className="min-w-0 flex-1">
 				<p className="truncate font-display text-sm font-semibold">Ramzi AI</p>
 				<p className="truncate text-xs text-muted-foreground">
-					Votre assistant en SEO | GEO
+					Votre assistant IA
 				</p>
 			</div>
 			<Tooltip>
