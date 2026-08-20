@@ -1,7 +1,8 @@
+// components/ui/tooltip.tsx
 "use client";
 
 import { Tooltip as TooltipPrimitive } from "radix-ui";
-import type * as React from "react";
+import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -19,9 +20,32 @@ function TooltipProvider({
 }
 
 function Tooltip({
+	permanent = false,
+	open: openProp,
+	defaultOpen = false,
+	onOpenChange,
 	...props
-}: React.ComponentProps<typeof TooltipPrimitive.Root>) {
-	return <TooltipPrimitive.Root data-slot="tooltip" {...props} />;
+}: React.ComponentProps<typeof TooltipPrimitive.Root> & {
+	permanent?: boolean;
+}) {
+	const isControlled = openProp !== undefined;
+	const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+
+	const open = permanent ? true : isControlled ? openProp : internalOpen;
+
+	const handleOpenChange = (value: boolean) => {
+		if (!isControlled) setInternalOpen(value);
+		onOpenChange?.(value);
+	};
+
+	return (
+		<TooltipPrimitive.Root
+			data-slot="tooltip"
+			open={open}
+			onOpenChange={handleOpenChange}
+			{...props}
+		/>
+	);
 }
 
 function TooltipTrigger({
@@ -48,7 +72,7 @@ function TooltipContent({
 				{...props}
 			>
 				{children}
-				<TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-none bg-foreground fill-foreground" />
+				<TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-none bg-foreground fill-foreground" />
 			</TooltipPrimitive.Content>
 		</TooltipPrimitive.Portal>
 	);

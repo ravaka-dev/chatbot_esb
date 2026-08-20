@@ -27,7 +27,7 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 			`}</style>
 
 			<div className="fixed bottom-5 right-5 z-50 sm:bottom-8 sm:right-8">
-				<Tooltip>
+				<Tooltip permanent={!open}>
 					<TooltipTrigger asChild>
 						<button
 							onClick={onToggle}
@@ -67,7 +67,7 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 						</button>
 					</TooltipTrigger>
 					<TooltipContent>
-						<p>{open ? "Fermer l'assistant" : "Ramzi IA"}</p>
+						<p>{open ? "Fermer l'assistant" : "Cliquez ici - Ramzi IA"}</p>
 					</TooltipContent>
 				</Tooltip>
 			</div>

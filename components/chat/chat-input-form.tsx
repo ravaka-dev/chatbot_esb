@@ -40,7 +40,7 @@ export function ChatInputForm({
 						ref={textareaRef}
 						value={value}
 						onChange={(e) => onChange(e.target.value)}
-						placeholder="Votre question SEO ou GEO ..."
+						placeholder="Ecrire ici ..."
 					/>
 				</PromptInputBody>
 				<PromptInputFooter className="justify-end">
