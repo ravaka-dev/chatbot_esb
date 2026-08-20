@@ -18,10 +18,15 @@ export function ChatHeader({ onReset }: ChatHeaderProps) {
 	return (
 		<header className="flex items-center gap-3 border-b border-border bg-secondary/60 px-4 py-3">
 			<span className="flex size-12 items-center justify-center bg-transparent text-primary-foreground">
-				<Image src={RamziImage} alt="Photo de Ramzi" sizes="auto" className="object-contain rounded-full"/>
+				<Image
+					src={RamziImage}
+					alt="Photo de Ramzi"
+					sizes="auto"
+					className="object-contain rounded-full"
+				/>
 			</span>
 			<div className="min-w-0 flex-1">
-				<p className="truncate font-display text-sm font-semibold">Ramzi AI</p>
+				<p className="truncate font-display text-sm font-semibold">Ramzi IA</p>
 				<p className="truncate text-xs text-muted-foreground">
 					Votre assistant IA
 				</p>

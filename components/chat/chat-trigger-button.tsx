@@ -1,4 +1,4 @@
-import { X , MessageCircle } from "lucide-react";
+import { X, MessageCircle } from "lucide-react";
 import Image from "next/image";
 import RamziImage from "@/public/icons/Avatar Ramzi.png";
 import {
@@ -67,7 +67,7 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 						</button>
 					</TooltipTrigger>
 					<TooltipContent>
-						<p>{open ? "Fermer l'assistant" : "Accéder à Ramzi AI"}</p>
+						<p>{open ? "Fermer l'assistant" : "Ramzi IA"}</p>
 					</TooltipContent>
 				</Tooltip>
 			</div>
