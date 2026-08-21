@@ -1,5 +1,5 @@
 const SUGGESTIONS = [
-	"Quand seriez-vous disponible pour échanger avec notre expert ? Nous pouvons organiser un rendez-vous selon vos disponibilités.",
+	"Je souhaite prendre rendez-vous avec votre expert.",
 ];
 
 interface ChatSuggestionsProps {

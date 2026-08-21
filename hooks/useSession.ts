@@ -23,7 +23,7 @@ export function useSession(storageKey: string) {
 		const newId = crypto.randomUUID();
 		try {
 			window.localStorage.setItem(`${storageKey}_session_id`, newId);
-		} catch (error){
+		} catch (error) {
 			console.warn("localStorage indisponible, session non persistée", error); // Pourquoi : garde une trace sans bloquer le flux
 		}
 		setSessionId(newId); // Pourquoi : il faut mettre à jour l'état dans tous les cas, pas seulement au catch — sinon le composant continue de lire l'ancien ID
