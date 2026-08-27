@@ -1,12 +1,11 @@
 import { Trash } from "lucide-react";
-
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Image from "next/image";
 
 import RamziImage from "@/public/icons/Avatar Ramzi.png";
 
@@ -23,6 +22,7 @@ export function ChatHeader({ onReset }: ChatHeaderProps) {
 					alt="Photo de Ramzi"
 					sizes="auto"
 					className="object-contain rounded-full"
+					loading="eager"
 				/>
 			</span>
 			<div className="min-w-0 flex-1">

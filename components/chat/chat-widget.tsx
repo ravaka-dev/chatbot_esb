@@ -2,17 +2,15 @@
 
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useState, useMemo } from "react";
-
-import { cn } from "@/lib/utils";
+import { useEffect, useMemo, useState } from "react";
 import { useAutoFocus } from "@/hooks/useAutoFocus";
+import { useSession } from "@/hooks/useSession";
+import { cn } from "@/lib/utils";
 import { useChatPersistence } from "../../hooks/useChatPersistence";
-
 import { ChatHeader } from "./chat-header";
 import { ChatInputForm } from "./chat-input-form";
 import { ChatMessageList } from "./chat-message-list";
 import { ChatTriggerButton } from "./chat-trigger-button";
-import { useSession } from "@/hooks/useSession";
 
 const STORAGE_KEY = "esb-seo-chat";
 
@@ -34,6 +32,13 @@ export function ChatWidget() {
 
 	const isBusy = status === "submitted" || status === "streaming";
 
+	useEffect(() => {
+		const timer = setTimeout(() => setOpen(true), 200);
+		// Pourquoi : laisse le premier rendu (fermé) être peint avant de basculer,
+		// sinon la transition CSS n'a rien à animer
+		return () => clearTimeout(timer);
+	}, []);
+
 	const send = (text: string) => {
 		const value = text.trim();
 		if (!value || isBusy) return;
@@ -54,7 +59,7 @@ export function ChatWidget() {
 			<ChatTriggerButton open={open} onToggle={() => setOpen((v) => !v)} />
 			<div
 				className={cn(
-					"fixed bottom-26 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-float transition-all duration-200 sm:right-8",
+					"fixed bottom-26 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-float transition-all duration-300 sm:right-8",
 					open
 						? "pointer-events-auto translate-y-0 scale-100 opacity-100"
 						: "pointer-events-none translate-y-3 scale-95 opacity-0",

@@ -1,33 +1,46 @@
-const SUGGESTIONS = [
-	"Je souhaite prendre rendez-vous avec votre expert.",
-];
+// chat-suggestions.tsx
+"use client";
+
+import { useStreamedText } from "@/hooks/useStreamedText";
+import { cn } from "@/lib/utils";
+
+const SUGGESTIONS = ["Je souhaite prendre rendez-vous avec votre expert."];
+
+// Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
+const INTRO_TEXT = `Bonjour 👋
+
+Je suis Ramzi AI, l'assistant de Ramzi, expert en SEO & GEO.
+Votre site peut avoir du potentiel sans que vous sachiez exactement quoi améliorer, pourquoi votre visibilité stagne ou comment être mieux référencé sur Google et les moteurs de recherche IA.
+
+🎯 Mon rôle est simple : comprendre votre situation et vous mettre en relation avec Ramzi, afin que vous puissiez bénéficier de conseils adaptés à votre projet.
+
+📅 Prenez rendez-vous avec notre expert et échangez sur votre site, vos objectifs et les opportunités d'amélioration.
+Je peux vous aider à organiser votre rendez-vous dès maintenant. 🤝`;
 
 interface ChatSuggestionsProps {
 	onSelect: (suggestion: string) => void;
 }
 
 export function ChatSuggestions({ onSelect }: ChatSuggestionsProps) {
+	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
+		wordsPerTick: 2,
+		intervalMs: 100,
+	});
+
 	return (
 		<div className="space-y-4 py-4">
-			<p className="text-sm text-muted-foreground">
-				Bonjour 👋<br />
-				<br />
-				Je suis Ramzi AI, l’assistant de Ramzi, expert en SEO &amp; GEO.
-				<br />
-				Votre site peut avoir du potentiel sans que vous sachiez exactement quoi
-				améliorer, pourquoi votre visibilité stagne ou comment être mieux
-				référencé sur Google et les moteurs de recherche IA.
-				<br />
-				<br />🎯 Mon rôle est simple : comprendre votre situation et vous mettre
-				en relation avec Ramzi, afin que vous puissiez bénéficier de conseils
-				adaptés à votre projet.
-				<br />
-				<br />📅 Prenez rendez-vous avec notre expert et échangez sur votre
-				site, vos objectifs et les opportunités d'amélioration.
-				<br />
-				Je peux vous aider à organiser votre rendez-vous dès maintenant. 🤝
+			<p className="whitespace-pre-line text-sm text-muted-foreground">
+				{streamedIntro}
+				{!done && (
+					<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-muted-foreground/60 align-middle" />
+				)}
 			</p>
-			<div className="flex flex-col gap-2">
+			<div
+				className={cn(
+					"flex flex-col gap-2 transition-opacity duration-300",
+					done ? "opacity-100" : "pointer-events-none opacity-0",
+				)}
+			>
 				{SUGGESTIONS.map((s) => (
 					<button
 						key={s}
