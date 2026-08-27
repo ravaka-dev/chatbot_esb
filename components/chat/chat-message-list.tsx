@@ -30,9 +30,7 @@ export function ChatMessageList({
 	return (
 		<Conversation className="flex-1">
 			<ConversationContent className="gap-4">
-				{messages.length === 0 && (
-					<ChatSuggestions onSelect={onSelectSuggestion} />
-				)}
+				{messages.length === 0 && <ChatSuggestions />}
 
 				{messages.map((message) => (
 					<Message key={message.id} from={message.role}>

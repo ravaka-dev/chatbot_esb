@@ -4,27 +4,19 @@
 import { useStreamedText } from "@/hooks/useStreamedText";
 import { cn } from "@/lib/utils";
 
-const SUGGESTIONS = ["Je souhaite prendre rendez-vous avec votre expert."];
-
 // Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
-const INTRO_TEXT = `Bonjour 👋
+const INTRO_TEXT = `Bonjour ! 👋
 
-Je suis Ramzi AI, l'assistant de Ramzi, expert en SEO & GEO.
-Votre site peut avoir du potentiel sans que vous sachiez exactement quoi améliorer, pourquoi votre visibilité stagne ou comment être mieux référencé sur Google et les moteurs de recherche IA.
+Je me présente : Ramzi IA, l'agent virtuel d'ESB Agence Numérique & IA. 🤖
 
-🎯 Mon rôle est simple : comprendre votre situation et vous mettre en relation avec Ramzi, afin que vous puissiez bénéficier de conseils adaptés à votre projet.
+Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c'est l'original… et moi, la version disponible 24/7, même à 11h du soir ! 🙂
 
-📅 Prenez rendez-vous avec notre expert et échangez sur votre site, vos objectifs et les opportunités d'amélioration.
-Je peux vous aider à organiser votre rendez-vous dès maintenant. 🤝`;
+En très peu de temps, je peux effectuer un petit test pour vérifier un aspect de la visibilité numérique de ton entreprise. Ça te dit?" 🧐`;
 
-interface ChatSuggestionsProps {
-	onSelect: (suggestion: string) => void;
-}
-
-export function ChatSuggestions({ onSelect }: ChatSuggestionsProps) {
+export function ChatSuggestions() {
 	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
 		wordsPerTick: 2,
-		intervalMs: 100,
+		intervalMs: 80,
 	});
 
 	return (
@@ -40,18 +32,7 @@ export function ChatSuggestions({ onSelect }: ChatSuggestionsProps) {
 					"flex flex-col gap-2 transition-opacity duration-300",
 					done ? "opacity-100" : "pointer-events-none opacity-0",
 				)}
-			>
-				{SUGGESTIONS.map((s) => (
-					<button
-						key={s}
-						type="button"
-						onClick={() => onSelect(s)}
-						className="rounded-xl border border-border bg-secondary px-3 py-2 text-left text-sm transition-colors hover:border-primary/60 hover:bg-secondary"
-					>
-						{s}
-					</button>
-				))}
-			</div>
+			></div>
 		</div>
 	);
 }
