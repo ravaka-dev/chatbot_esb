@@ -69,12 +69,7 @@ export function ChatWidget() {
 				aria-label="Assistant SEO,GEO et IA ESB"
 			>
 				<ChatHeader onReset={reset} />
-				<ChatMessageList
-					messages={messages}
-					status={status}
-					error={error}
-					onSelectSuggestion={send}
-				/>
+				<ChatMessageList messages={messages} status={status} error={error} />
 				<ChatInputForm
 					value={input}
 					onChange={setInput}
