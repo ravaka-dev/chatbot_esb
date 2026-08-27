@@ -76,10 +76,10 @@ const detectSpeechInputMode = (): SpeechInputMode => {
 		return "none";
 	}
 
-	if ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) {
-		return "speech-recognition";
-	}
-
+	// Pourquoi : on ignore volontairement le Web Speech API natif (Chrome/Edge)
+	// pour que TOUS les navigateurs passent par MediaRecorder + notre route
+	// /api/transcribe (Groq Whisper) — comportement et précision identiques
+	// partout, plutôt qu'un résultat différent selon le moteur du navigateur
 	if ("MediaRecorder" in window && "mediaDevices" in navigator) {
 		return "media-recorder";
 	}
@@ -113,6 +113,9 @@ export const SpeechInput = ({
 	onAudioRecordedRef.current = onAudioRecorded;
 
 	// Initialize Speech Recognition when mode is speech-recognition
+	// Pourquoi ce bloc ne s'exécute plus jamais : detectSpeechInputMode ne
+	// renvoie plus "speech-recognition" (voir plus haut). On garde le code
+	// intact pour pouvoir revenir en arrière facilement si besoin.
 	useEffect(() => {
 		if (mode !== "speech-recognition") {
 			return;
@@ -303,6 +306,7 @@ export const SpeechInput = ({
 
 			{/* Main record button */}
 			<Button
+			type="button"
 				className={cn(
 					"relative z-10 rounded-full transition-all duration-300",
 					isListening

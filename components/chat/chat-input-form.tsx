@@ -6,6 +6,7 @@ import {
 	PromptInputSubmit,
 	PromptInputTextarea,
 } from "@/components/ai-elements/prompt-input";
+import { SpeechInput } from "@/components/ai-elements/speech-input";
 
 type ChatStatus = "submitted" | "streaming" | "ready" | "error";
 
@@ -43,7 +44,37 @@ export function ChatInputForm({
 						placeholder="Ecrire ici ..."
 					/>
 				</PromptInputBody>
-				<PromptInputFooter className="justify-end">
+				<PromptInputFooter className="justify-between">
+					<SpeechInput
+						lang="fr-FR"
+						disabled={isBusy}
+						variant="ghost"
+						size="icon"
+						className="text-muted-foreground"
+						onAudioRecorded={async (audioBlob) => {
+							const formData = new FormData();
+							formData.append("file", audioBlob, "audio.webm");
+
+							const response = await fetch("/api/transcribe", {
+								method: "POST",
+								body: formData,
+							});
+
+							if (!response.ok) {
+								const { error } = await response
+									.json()
+									.catch(() => ({ error: "Erreur inconnue" }));
+								throw new Error(error);
+							}
+
+							const { text } = await response.json();
+							return text;
+						}}
+						onTranscriptionChange={(text) => {
+							onChange(value.trim() ? `${value.trim()} ${text}` : text);
+							textareaRef.current?.focus();
+						}}
+					/>
 					<PromptInputSubmit
 						status={status}
 						disabled={!value.trim() || isBusy}

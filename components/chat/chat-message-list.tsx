@@ -18,14 +18,12 @@ interface ChatMessageListProps {
 	messages: UIMessage[];
 	status: ChatStatus;
 	error: Error | undefined;
-	onSelectSuggestion: (suggestion: string) => void;
 }
 
 export function ChatMessageList({
 	messages,
 	status,
 	error,
-	onSelectSuggestion,
 }: ChatMessageListProps) {
 	return (
 		<Conversation className="flex-1">
