@@ -2,10 +2,10 @@
 
 import type { ChatStatus, FileUIPart, SourceDocumentUIPart } from "ai";
 import {
-	CornerDownLeftIcon,
 	ImageIcon,
 	Monitor,
 	PlusIcon,
+	SendHorizonal,
 	SquareIcon,
 	XIcon,
 } from "lucide-react";
@@ -430,7 +430,7 @@ export const PromptInputActionAddAttachments = ({
 
 	return (
 		<DropdownMenuItem {...props} onSelect={handleSelect}>
-			<ImageIcon className="mr-2 size-4" /> {label}
+			<ImageIcon className="mr-2 size-5" /> {label}
 		</DropdownMenuItem>
 	);
 };
@@ -475,7 +475,7 @@ export const PromptInputActionAddScreenshot = ({
 
 	return (
 		<DropdownMenuItem {...props} onSelect={handleSelect}>
-			<Monitor className="mr-2 size-4" />
+			<Monitor className="mr-2 size-5" />
 			{label}
 		</DropdownMenuItem>
 	);
@@ -921,7 +921,7 @@ export const PromptInput = ({
 				ref={formRef}
 				{...props}
 			>
-				<InputGroup className="overflow-hidden">{children}</InputGroup>
+				<InputGroup className="overflow-hidden h-fit">{children}</InputGroup>
 			</form>
 		</>
 	);
@@ -953,23 +953,23 @@ export type PromptInputTextareaProps = ComponentProps<
 	typeof InputGroupTextarea
 >;
 
-export const PromptInputTextarea = ({
+export type PromptInputInputProps = ComponentProps<"input">;
+
+export const PromptInputInput = ({
 	onChange,
 	onKeyDown,
 	className,
 	placeholder = "What would you like to know?",
 	...props
-}: PromptInputTextareaProps) => {
+}: PromptInputInputProps) => {
 	const controller = useOptionalPromptInputController();
 	const attachments = usePromptInputAttachments();
 	const [isComposing, setIsComposing] = useState(false);
 
-	const handleKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = useCallback(
+	const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = useCallback(
 		(e) => {
-			// Call the external onKeyDown handler first
 			onKeyDown?.(e);
 
-			// If the external handler prevented default, don't run internal logic
 			if (e.defaultPrevented) {
 				return;
 			}
@@ -978,12 +978,8 @@ export const PromptInputTextarea = ({
 				if (isComposing || e.nativeEvent.isComposing) {
 					return;
 				}
-				if (e.shiftKey) {
-					return;
-				}
 				e.preventDefault();
 
-				// Check if the submit button is disabled before submitting
 				const { form } = e.currentTarget;
 				const submitButton = form?.querySelector(
 					'button[type="submit"]',
@@ -995,7 +991,6 @@ export const PromptInputTextarea = ({
 				form?.requestSubmit();
 			}
 
-			// Remove last attachment when Backspace is pressed and textarea is empty
 			if (
 				e.key === "Backspace" &&
 				e.currentTarget.value === "" &&
@@ -1011,7 +1006,7 @@ export const PromptInputTextarea = ({
 		[onKeyDown, isComposing, attachments],
 	);
 
-	const handlePaste: ClipboardEventHandler<HTMLTextAreaElement> = useCallback(
+	const handlePaste: ClipboardEventHandler<HTMLInputElement> = useCallback(
 		(event) => {
 			const items = event.clipboardData?.items;
 
@@ -1043,7 +1038,7 @@ export const PromptInputTextarea = ({
 
 	const controlledProps = controller
 		? {
-				onChange: (e: ChangeEvent<HTMLTextAreaElement>) => {
+				onChange: (e: ChangeEvent<HTMLInputElement>) => {
 					controller.textInput.setInput(e.currentTarget.value);
 					onChange?.(e);
 				},
@@ -1054,14 +1049,18 @@ export const PromptInputTextarea = ({
 			};
 
 	return (
-		<InputGroupTextarea
-			className={cn("field-sizing-content max-h-48 min-h-16", className)}
+		<input
+			className={cn(
+				"h-9 w-full min-w-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+				className,
+			)}
 			name="message"
 			onCompositionEnd={handleCompositionEnd}
 			onCompositionStart={handleCompositionStart}
 			onKeyDown={handleKeyDown}
 			onPaste={handlePaste}
 			placeholder={placeholder}
+			type="text"
 			{...props}
 			{...controlledProps}
 		/>
@@ -1180,7 +1179,7 @@ export const PromptInputActionMenuTrigger = ({
 }: PromptInputActionMenuTriggerProps) => (
 	<DropdownMenuTrigger asChild>
 		<PromptInputButton className={className} {...props}>
-			{children ?? <PlusIcon className="size-4" />}
+			{children ?? <PlusIcon className="size-5" />}
 		</PromptInputButton>
 	</DropdownMenuTrigger>
 );
@@ -1225,14 +1224,14 @@ export const PromptInputSubmit = ({
 }: PromptInputSubmitProps) => {
 	const isGenerating = status === "submitted" || status === "streaming";
 
-	let Icon = <CornerDownLeftIcon className="size-4" />;
+	let Icon = <SendHorizonal className="size-5" />;
 
 	if (status === "submitted") {
 		Icon = <Spinner />;
 	} else if (status === "streaming") {
 		Icon = <SquareIcon className="size-4" />;
 	} else if (status === "error") {
-		Icon = <XIcon className="size-4" />;
+		Icon = <XIcon className="size-5" />;
 	}
 
 	const handleClick = useCallback(

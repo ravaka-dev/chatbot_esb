@@ -28,8 +28,7 @@ export function ChatWidget() {
 	});
 
 	const { clear } = useChatPersistence(STORAGE_KEY, messages, setMessages);
-	const { textareaRef, focusInput } = useAutoFocus(open, status);
-
+	const { inputRef, focusInput } = useAutoFocus<HTMLInputElement>(open, status);
 	const isBusy = status === "submitted" || status === "streaming";
 
 	useEffect(() => {
@@ -59,14 +58,14 @@ export function ChatWidget() {
 			<ChatTriggerButton open={open} onToggle={() => setOpen((v) => !v)} />
 			<div
 				className={cn(
-					"fixed bottom-26 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-float transition-all duration-300 sm:right-8",
+					"fixed bottom-26 right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hiddebn rounded-2xl border border-border bg-card shadow-float transition-all duration-300 sm:right-8",
 					open
 						? "pointer-events-auto translate-y-0 scale-100 opacity-100"
 						: "pointer-events-none translate-y-3 scale-95 opacity-0",
 				)}
 				style={{ height: "min(650px , calc(100vh - 8rem" }}
 				role="dialog"
-				aria-label="Assistant SEO,GEO et IA ESB"
+				aria-label="Ramzi Ai, ESB"
 			>
 				<ChatHeader onReset={reset} />
 				<ChatMessageList messages={messages} status={status} error={error} />
@@ -76,7 +75,7 @@ export function ChatWidget() {
 					onSubmit={() => send(input)}
 					status={status}
 					isBusy={isBusy}
-					textareaRef={textareaRef}
+					inputRef={inputRef}
 				/>
 			</div>
 		</>

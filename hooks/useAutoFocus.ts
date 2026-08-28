@@ -1,12 +1,18 @@
+// hooks/useAutoFocus.ts
 import { useCallback, useEffect, useRef } from "react";
 
 type ChatStatus = "submitted" | "streaming" | "ready" | "error";
 
-export function useAutoFocus(open: boolean, status: ChatStatus) {
-	const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+type FocusableElement = HTMLInputElement | HTMLTextAreaElement;
+
+export function useAutoFocus<T extends FocusableElement = HTMLInputElement>(
+	open: boolean,
+	status: ChatStatus,
+) {
+	const inputRef = useRef<T | null>(null);
 
 	const focusInput = useCallback(() => {
-		window.setTimeout(() => textareaRef.current?.focus(), 80);
+		window.setTimeout(() => inputRef.current?.focus(), 80);
 	}, []);
 
 	useEffect(() => {
@@ -17,5 +23,5 @@ export function useAutoFocus(open: boolean, status: ChatStatus) {
 		if (status === "ready" && open) focusInput();
 	}, [status, open, focusInput]);
 
-	return { textareaRef, focusInput };
+	return { inputRef, focusInput };
 }
