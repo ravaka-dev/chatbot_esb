@@ -1,3 +1,4 @@
+import { Mic } from "lucide-react";
 import type { RefObject } from "react";
 import {
 	PromptInput,
@@ -84,14 +85,13 @@ export function ChatInputForm({
 				</PromptInputBody>
 				<PromptInputFooter className="w-full p-0 flex justify-center">
 					<p
-						className={`py-0.5 px-2 text-center text-xs text-gray-500 motion-reduce:animate-none ${
-							hasContent ? "" : "animate-pulse"
+						className={`py-3 text-center text-xs text-gray-500 motion-reduce:animate-none ${
+							hasContent ? "py-5" : "animate-pulse"
 						}`}
 					>
-						{hasContent
-							? "Dis-moi ton besoin, je m'occupe du reste. ✨"
-							: "Tu peux aussi me parler si tu préfères ne pas m'écrire.🎤"}
+						{hasContent ? "" : "Tu peux aussi utiliser la commande vocale."}
 					</p>
+					{!hasContent && <Mic className="text-primary" />}
 				</PromptInputFooter>
 			</PromptInput>
 		</div>
