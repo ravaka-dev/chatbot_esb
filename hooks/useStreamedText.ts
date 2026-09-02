@@ -1,39 +1,52 @@
 // hooks/useStreamedText.ts
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface UseStreamedTextOptions {
-	wordsPerTick?: number;
-	intervalMs?: number;
+	charsPerSecond?: number;
 }
 
 export function useStreamedText(
 	text: string,
-	{ wordsPerTick = 2, intervalMs = 35 }: UseStreamedTextOptions = {},
+	{ charsPerSecond = 220 }: UseStreamedTextOptions = {},
 ) {
 	const [output, setOutput] = useState("");
 	const [done, setDone] = useState(false);
+	const rafRef = useRef<number | null>(null);
 
 	useEffect(() => {
-		// Pourquoi : découpage par mots, comme smoothStream({ chunking: "word" })
-		// côté serveur — même rythme visuel que les vraies réponses streamées.
-		const words = text.split(" ");
-		let index = 0;
 		setOutput("");
 		setDone(false);
 
-		const id = setInterval(() => {
-			index += wordsPerTick;
-			setOutput(words.slice(0, index).join(" "));
-			if (index >= words.length) {
-				clearInterval(id);
-				setDone(true);
-			}
-		}, intervalMs);
+		let startTime: number | null = null;
 
-		return () => clearInterval(id);
-	}, [text, wordsPerTick, intervalMs]);
+		const step = (timestamp: number) => {
+			if (startTime === null) startTime = timestamp;
+			const elapsedSeconds = (timestamp - startTime) / 1000;
+
+			// Pourquoi : nombre de caractères basé sur le temps écoulé (pas sur
+			// un compteur de ticks) → avance de façon continue, insensible aux
+			// variations de fréquence de rAF, et ne dérive pas comme setInterval.
+			const targetIndex = Math.floor(elapsedSeconds * charsPerSecond);
+			const clampedIndex = Math.min(targetIndex, text.length);
+
+			setOutput(text.slice(0, clampedIndex));
+
+			if (clampedIndex >= text.length) {
+				setDone(true);
+				return;
+			}
+
+			rafRef.current = requestAnimationFrame(step);
+		};
+
+		rafRef.current = requestAnimationFrame(step);
+
+		return () => {
+			if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+		};
+	}, [text, charsPerSecond]);
 
 	return { text: output, done };
 }
