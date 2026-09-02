@@ -89,7 +89,7 @@ export function ChatInputForm({
 							hasContent ? "py-5" : "animate-pulse"
 						}`}
 					>
-						{hasContent ? "" : "Tu peux aussi utiliser la commande vocale."}
+						{hasContent ? "" : "Tu peux aussi utiliser le micro."}
 					</p>
 					{!hasContent && <Mic className="text-primary" />}
 				</PromptInputFooter>

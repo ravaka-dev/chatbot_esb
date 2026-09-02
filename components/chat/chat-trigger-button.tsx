@@ -1,11 +1,11 @@
-import { X, MessageCircle } from "lucide-react";
+import { X } from "lucide-react";
 import Image from "next/image";
-import RamziImage from "@/public/icons/Avatar Ramzi.png";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import RamziImage from "@/public/icons/Avatar Ramzi.png";
 
 interface ChatTriggerButtonProps {
 	open: boolean;
@@ -30,6 +30,7 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 				<Tooltip permanent={!open}>
 					<TooltipTrigger asChild>
 						<button
+							type="button"
 							onClick={onToggle}
 							aria-label={
 								open ? "Fermer l'assistant ESB" : "Ouvrir l'assistant ESB"
