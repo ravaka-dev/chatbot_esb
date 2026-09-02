@@ -9,12 +9,15 @@ const INTRO_TEXT = `Bonjour !
 
 Je me présente : Ramzi IA, l'agent virtuel d'ESB Agence Numérique & IA. 
 
-Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c'est l'original… et moi, la version disponible 24/7, même à 11h du soir ! `;
+Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c'est l'original… et moi, la version disponible 24/7, même à 11h du soir !
+
+Mon rôle est surtout de comprendre rapidement ta réalité et voir si on peut réellement t’aider avec le numérique.
+
+D’ailleurs, pour mieux commencer et cibler tes besoins, es-tu chef d'entreprise ou salarié ?`;
 
 export function ChatSuggestions() {
 	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
-		wordsPerTick: 1,
-		intervalMs: 200,
+		charsPerSecond: 23,
 	});
 
 	return (

@@ -33,9 +33,11 @@ export function ChatMessageList({
 				{messages.map((message) => (
 					<Message key={message.id} from={message.role}>
 						<MessageContent>
-							{message.parts.map((part, i) =>
+							{message.parts.map((part) =>
 								part.type === "text" ? (
-									<MessageResponse key={i}>{part.text}</MessageResponse>
+									<MessageResponse key={message.id}>
+										{part.text}
+									</MessageResponse>
 								) : null,
 							)}
 						</MessageContent>
@@ -43,13 +45,17 @@ export function ChatMessageList({
 				))}
 
 				{status === "submitted" && (
-					<Shimmer className="text-sm">Analyse en cours...</Shimmer>
+					<div className="flex items-center gap-1">
+						<span className="size-3 text-primary animate-bounce rounded-full bg-current [animation-delay:-0.4s]" />
+						<span className="size-3 text-primary/80 animate-bounce rounded-full bg-current [animation-delay:-0.2s]" />
+						<span className="size-3 text-primary/60 animate-bounce rounded-full bg-current" />
+					</div>
 				)}
 
 				{error && (
-					<p className="text-sm text-destructive">
+					<Shimmer className="text-sm text-destructive">
 						Une erreur est survenue. Merci de réessayer dans un instant.
-					</p>
+					</Shimmer>
 				)}
 			</ConversationContent>
 			<ConversationScrollButton />
