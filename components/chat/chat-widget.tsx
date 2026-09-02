@@ -67,7 +67,7 @@ export function ChatWidget() {
 				role="dialog"
 				aria-label="Ramzi Ai, ESB"
 			>
-				<ChatHeader onReset={reset} />
+				<ChatHeader onReset={reset} messagesCount={messages.length} />
 				<ChatMessageList messages={messages} status={status} error={error} />
 				<ChatInputForm
 					value={input}

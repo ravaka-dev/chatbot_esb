@@ -17,7 +17,7 @@ D’ailleurs, pour mieux commencer et cibler tes besoins, es-tu chef d'entrepris
 
 export function ChatSuggestions() {
 	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
-		charsPerSecond: 23,
+		charsPerSecond: 18,
 	});
 
 	return (
