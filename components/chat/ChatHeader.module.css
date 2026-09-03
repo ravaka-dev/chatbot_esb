@@ -1,0 +1,77 @@
+.circle {
+	position: absolute;
+	border-radius: 9999px;
+	background-color: rgba(0, 0, 0, 0.15);
+}
+
+.circle1 {
+	top: -20%;
+	left: -5%;
+	width: 8rem;
+	height: 8rem;
+	animation: float1 8s ease-in-out infinite;
+}
+
+.circle2 {
+	bottom: -30%;
+	right: 10%;
+	width: 5rem;
+	height: 5rem;
+	animation: float2 6s ease-in-out infinite;
+}
+
+.circle3 {
+	top: 20%;
+	right: -8%;
+	width: 6rem;
+	height: 6rem;
+	animation: float3 10s ease-in-out infinite;
+}
+
+.circle4 {
+	bottom: -10%;
+	left: 25%;
+	width: 4rem;
+	height: 4rem;
+	animation: float4 7s ease-in-out infinite;
+}
+
+@keyframes float1 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(20px, 15px);
+	}
+}
+
+@keyframes float2 {
+	0%,
+	100% {
+		transform: translate(0, 0);
+	}
+	50% {
+		transform: translate(-15px, -20px);
+	}
+}
+
+@keyframes float3 {
+	0%,
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(-10px, 10px) scale(1.1);
+	}
+}
+
+@keyframes float4 {
+	0%,
+	100% {
+		transform: translate(0, 0) scale(1);
+	}
+	50% {
+		transform: translate(15px, -10px) scale(0.9);
+	}
+}
