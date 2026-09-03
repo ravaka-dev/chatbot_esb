@@ -1,3 +1,4 @@
+// app/components/ChatHeader.tsx
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import RamziImage from "@/public/icons/Avatar Ramzi.png";
+import styles from "./ChatHeader.module.css";
 
 interface ChatHeaderProps {
 	onReset: () => void;
@@ -53,13 +55,17 @@ function ResetButton({
 export function ChatHeader({ onReset, messagesCount }: ChatHeaderProps) {
 	if (messagesCount === 0) {
 		return (
-			<header className="flex flex-row items-center justify-between px-8 gap-10 bg-linear-to-r from-primary/65 to-primary/90 py-6 text-primary-foreground">
-				<div>
+			<header className="relative flex flex-row items-center justify-between overflow-hidden px-8 gap-10 bg-linear-to-r from-primary/65 to-primary/90 py-6 text-primary-foreground">
+				<span aria-hidden className={`${styles.circle} ${styles.circle1}`} />
+				<span aria-hidden className={`${styles.circle} ${styles.circle3}`} />
+				<span aria-hidden className={`${styles.circle} ${styles.circle4}`} />
+
+				<div className="relative z-10">
 					<p className="font-display text-xl font-semibold">Ramzi IA</p>
 					<p className="truncate text-xs text-white">Votre assistant IA</p>
 				</div>
-				<div>
-					<span className="flex size-15 items-center justify-center overflow-hidden animate-[pulse_2s_ease-in-out_infinite] rounded-full bg-white ring-8 ring-primary-foreground/10">
+				<div className="relative z-10">
+					<span className="flex size-15 items-center justify-center overflow-hidden  rounded-full bg-white ring-8 ring-primary-foreground/10">
 						{" "}
 						<Image
 							src={RamziImage}
