@@ -116,10 +116,9 @@ export function useSpeechRecorder({
 	// Pourquoi : distingue un stop() (transcrire) d'un cancel() (jeter l'audio)
 	// sans dupliquer la logique de nettoyage du MediaRecorder
 	const discardRef = useRef(false);
-	const onTranscriptionChangeRef =
-		useRef<UseSpeechRecorderOptions["onTranscriptionChange"]>(
-			onTranscriptionChange,
-		);
+	const onTranscriptionChangeRef = useRef<
+		UseSpeechRecorderOptions["onTranscriptionChange"]
+	>(onTranscriptionChange);
 	const onAudioRecordedRef =
 		useRef<UseSpeechRecorderOptions["onAudioRecorded"]>(onAudioRecorded);
 

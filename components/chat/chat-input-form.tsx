@@ -34,31 +34,31 @@ export function ChatInputForm({
 	const hasContent = trimmedValue.length > 0;
 
 	const speechRecorder = useSpeechRecorder({
-			lang: "fr-FR",
-			onAudioRecorded: async (audioBlob) => {
-				const formData = new FormData();
-				formData.append("file", audioBlob, "audio.webm");
+		lang: "fr-FR",
+		onAudioRecorded: async (audioBlob) => {
+			const formData = new FormData();
+			formData.append("file", audioBlob, "audio.webm");
 
-				const response = await fetch("/api/transcribe", {
-					method: "POST",
-					body: formData,
-				});
+			const response = await fetch("/api/transcribe", {
+				method: "POST",
+				body: formData,
+			});
 
-				if (!response.ok) {
-					const { error } = await response
-						.json()
-						.catch(() => ({ error: "Erreur inconnue" }));
-					throw new Error(error);
-				}
+			if (!response.ok) {
+				const { error } = await response
+					.json()
+					.catch(() => ({ error: "Erreur inconnue" }));
+				throw new Error(error);
+			}
 
-				const { text } = await response.json();
-				return text;
-			},
-			onTranscriptionChange: (text) => {
-				onChange(trimmedValue ? `${trimmedValue} ${text}` : text);
-				inputRef.current?.focus();
-			},
-		});
+			const { text } = await response.json();
+			return text;
+		},
+		onTranscriptionChange: (text) => {
+			onChange(trimmedValue ? `${trimmedValue} ${text}` : text);
+			inputRef.current?.focus();
+		},
+	});
 
 	return (
 		<div className="z-0">
