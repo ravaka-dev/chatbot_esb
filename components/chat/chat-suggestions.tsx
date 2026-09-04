@@ -1,35 +1,99 @@
 // chat-suggestions.tsx
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
+import { MessageMeta } from "@/components/ai-elements/message-meta";
+import {
+	bubbleRadiusClass,
+	type BubblePosition,
+} from "@/components/chat/paragraph-bubble";
+import { Card, CardContent } from "@/components/ui/card";
 import { useStreamedText } from "@/hooks/useStreamedText";
 import { cn } from "@/lib/utils";
 
 // Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
-const INTRO_TEXT = `Bonjour! Je me présente : Ramzi, l’agent IA d’ESB Agence Numérique & IA. 
+const PARAGRAPHS = [
+	`Bonjour! Je me présente : Ramzi, l’agent IA d’ESB Agence Numérique & IA.`,
+	`Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c’est l’original… et moi, la version disponible même à 11 h le soir - en fait, 24/7! 😉`,
+	`Mon rôle est surtout de comprendre les réalités et les objectifs des entreprises afin de voir comment nous pouvons les aider à les atteindre le plus efficacement possible.`,
+	`D’ailleurs, permets-moi une petite question : quel est ton rôle professionnel actuellement?`,
+];
 
-Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c’est l’original… et moi, la version disponible même à 11 h le soir - en fait, 24/7! 😉 
-
-Mon rôle est surtout de comprendre les réalités et les objectifs des entreprises afin de voir comment nous pouvons les aider à les atteindre le plus efficacement possible. 
-
-D’ailleurs, permets-moi une petite question : quel est ton rôle professionnel actuellement?`;
-
-export function ChatSuggestions() {
-	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
+function StreamingParagraph({
+	text,
+	position,
+	onDone,
+}: {
+	text: string;
+	position: BubblePosition;
+	onDone: () => void;
+}) {
+	const { text: streamed, done } = useStreamedText(text, {
 		charsPerSecond: 25,
 	});
+	// Pourquoi : évite de rappeler onDone à chaque re-render du parent une fois le paragraphe terminé
+	const hasNotifiedDoneRef = useRef(false);
+
+	useEffect(() => {
+		if (done && !hasNotifiedDoneRef.current) {
+			hasNotifiedDoneRef.current = true;
+			onDone();
+		}
+	}, [done, onDone]);
 
 	return (
-		<div className="space-y-4 py-4">
-			<p className="whitespace-pre-line text-sm text-muted-foreground">
-				{streamedIntro}
+		<Card
+			className={cn(
+				"w-fit animate-in fade-in slide-in-from-bottom-2 bg-secondary py-2.5 shadow-none ring-0 duration-300",
+				bubbleRadiusClass(position),
+			)}
+		>
+			<CardContent className="whitespace-pre-line px-4 text-sm text-black">
+				{streamed}
 				{!done && (
-					<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-muted-foreground/60 align-middle" />
+					<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-primary-foreground/60 align-middle" />
 				)}
-			</p>
+			</CardContent>
+		</Card>
+	);
+}
+
+export function ChatSuggestions() {
+	const [revealedCount, setRevealedCount] = useState(0);
+	const allDone = revealedCount === PARAGRAPHS.length;
+
+	return (
+		<div>
+			<div className="flex flex-col gap-1">
+				{PARAGRAPHS.map((paragraph, index) => {
+					if (index > revealedCount) return null;
+
+					const position: BubblePosition = index === 0 ? "first" : "other";
+
+					return (
+						<StreamingParagraph
+							key={paragraph}
+							position={position}
+							text={paragraph}
+							onDone={() =>
+								setRevealedCount((count) => Math.max(count, index + 1))
+							}
+						/>
+					);
+				})}
+			</div>
+			{allDone && (
+				<MessageMeta
+					className="animate-in fade-in duration-300"
+					name="Ramzi IA"
+					roleLabel="Agent IA"
+				/>
+			)}
 			<div
 				className={cn(
 					"flex flex-col gap-2 transition-opacity duration-300",
-					done ? "opacity-100" : "pointer-events-none opacity-0",
+					allDone ? "opacity-100" : "pointer-events-none opacity-0",
 				)}
 			></div>
 		</div>
