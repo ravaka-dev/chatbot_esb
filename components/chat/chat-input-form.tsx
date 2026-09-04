@@ -8,6 +8,8 @@ import {
 	PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
 import { SpeechInput } from "@/components/ai-elements/speech-input";
+import { SpeechRecordingBar } from "@/components/ai-elements/speech-recording-bar";
+import { useSpeechRecorder } from "@/hooks/useSpeechRecorder";
 
 type ChatStatus = "submitted" | "streaming" | "ready" | "error";
 
@@ -31,6 +33,33 @@ export function ChatInputForm({
 	const trimmedValue = value.trim();
 	const hasContent = trimmedValue.length > 0;
 
+	const speechRecorder = useSpeechRecorder({
+			lang: "fr-FR",
+			onAudioRecorded: async (audioBlob) => {
+				const formData = new FormData();
+				formData.append("file", audioBlob, "audio.webm");
+
+				const response = await fetch("/api/transcribe", {
+					method: "POST",
+					body: formData,
+				});
+
+				if (!response.ok) {
+					const { error } = await response
+						.json()
+						.catch(() => ({ error: "Erreur inconnue" }));
+					throw new Error(error);
+				}
+
+				const { text } = await response.json();
+				return text;
+			},
+			onTranscriptionChange: (text) => {
+				onChange(trimmedValue ? `${trimmedValue} ${text}` : text);
+				inputRef.current?.focus();
+			},
+		});
+
 	return (
 		<div className="z-0">
 			<PromptInput
@@ -41,47 +70,34 @@ export function ChatInputForm({
 				}}
 			>
 				<PromptInputBody className="flex justify-between w-full h-fit gap-4 items-center mx-2 rounded-xl border border-gray-200">
-					<SpeechInput
-						lang="fr-FR"
-						disabled={isBusy}
-						variant="ghost"
-						size="icon"
-						className="text-white size-10 hover:bg-primary/80"
-						onAudioRecorded={async (audioBlob) => {
-							const formData = new FormData();
-							formData.append("file", audioBlob, "audio.webm");
-
-							const response = await fetch("/api/transcribe", {
-								method: "POST",
-								body: formData,
-							});
-
-							if (!response.ok) {
-								const { error } = await response
-									.json()
-									.catch(() => ({ error: "Erreur inconnue" }));
-								throw new Error(error);
-							}
-
-							const { text } = await response.json();
-							return text;
-						}}
-						onTranscriptionChange={(text) => {
-							onChange(trimmedValue ? `${trimmedValue} ${text}` : text);
-							inputRef.current?.focus();
-						}}
-					/>
-					<PromptInputInput
-						ref={inputRef}
-						value={value}
-						onChange={(e) => onChange(e.target.value)}
-						placeholder="Ecrire ici ..."
-					/>
-					<PromptInputSubmit
-						className="text-primary size-10 bg-transparent hover:bg-transparent"
-						status={status}
-						disabled={!trimmedValue || isBusy}
-					/>
+					{speechRecorder.isListening ? (
+						<SpeechRecordingBar
+							onCancel={speechRecorder.cancel}
+							onStop={speechRecorder.stop}
+						/>
+					) : (
+						<>
+							<SpeechInput
+								disabled={isBusy || speechRecorder.isDisabled}
+								isProcessing={speechRecorder.isProcessing}
+								variant="ghost"
+								size="icon"
+								className="text-white size-10 hover:bg-primary/80"
+								onClick={speechRecorder.start}
+							/>
+							<PromptInputInput
+								ref={inputRef}
+								value={value}
+								onChange={(e) => onChange(e.target.value)}
+								placeholder="Ecrire ici ..."
+							/>
+							<PromptInputSubmit
+								className="text-primary size-10 bg-transparent hover:bg-transparent"
+								status={status}
+								disabled={!trimmedValue || isBusy}
+							/>
+						</>
+					)}
 				</PromptInputBody>
 				<PromptInputFooter className="w-full p-0 flex justify-center">
 					<p
