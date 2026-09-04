@@ -4,7 +4,10 @@
 import { useEffect, useRef, useState } from "react";
 
 import { MessageMeta } from "@/components/ai-elements/message-meta";
-import { bubbleRadiusClass, type BubblePosition } from "@/components/chat/paragraph-bubble";
+import {
+	bubbleRadiusClass,
+	type BubblePosition,
+} from "@/components/chat/paragraph-bubble";
 import { Card, CardContent } from "@/components/ui/card";
 import { useStreamedText } from "@/hooks/useStreamedText";
 import { cn } from "@/lib/utils";
