@@ -19,19 +19,21 @@ export async function POST(req: Request) {
 
 	const stream = createUIMessageStream({
 		execute: async ({ writer }) => {
-			const id = crypto.randomUUID();
-
-			// Pourquoi : mot par mot avec délai → même animation de streaming pour
-			// une réponse réussie que pour un message d'erreur
-			const streamWords = async (text: string) => {
-				writer.write({ type: "text-start", id });
-				for (const word of text.split(" ")) {
-					writer.write({ type: "text-delta", id, delta: `${word} ` });
-					await new Promise((resolve) =>
-						setTimeout(resolve, WORD_STREAM_DELAY_MS),
-					);
+			// Pourquoi : un id distinct par paragraphe → chaque paragraphe est une
+			// part de message à part entière, animée mot par mot indépendamment
+			// (le client, MessageParagraphs, affiche chaque part dans sa propre bulle)
+			const streamParagraphs = async (paragraphs: string[]) => {
+				for (const paragraph of paragraphs) {
+					const id = crypto.randomUUID();
+					writer.write({ type: "text-start", id });
+					for (const word of paragraph.split(" ")) {
+						writer.write({ type: "text-delta", id, delta: `${word} ` });
+						await new Promise((resolve) =>
+							setTimeout(resolve, WORD_STREAM_DELAY_MS),
+						);
+					}
+					writer.write({ type: "text-end", id });
 				}
-				writer.write({ type: "text-end", id });
 			};
 
 			try {
@@ -45,15 +47,15 @@ export async function POST(req: Request) {
 					throw new Error(`Erreur lors de l'appel à n8n: ${response.status}`);
 				}
 
-				type N8nResponse = { message: string };
+				type N8nResponse = { message: string[] };
 				const data: N8nResponse = await response.json();
 
-				await streamWords(data.message);
+				await streamParagraphs(data.message);
 			} catch (error) {
 				console.error("Erreur Webhook n8n:", error);
-				await streamWords(
+				await streamParagraphs([
 					"Désolé, une erreur s'est produite lors du traitement de votre demande.",
-				);
+				]);
 			}
 		},
 	});

@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { MessageMeta } from "@/components/ai-elements/message-meta";
+import { bubbleRadiusClass, type BubblePosition } from "@/components/chat/paragraph-bubble";
 import { Card, CardContent } from "@/components/ui/card";
 import { useStreamedText } from "@/hooks/useStreamedText";
 import { cn } from "@/lib/utils";
@@ -15,18 +16,6 @@ const PARAGRAPHS = [
 	`Mon rôle est surtout de comprendre les réalités et les objectifs des entreprises afin de voir comment nous pouvons les aider à les atteindre le plus efficacement possible.`,
 	`D’ailleurs, permets-moi une petite question : quel est ton rôle professionnel actuellement?`,
 ];
-
-// Pourquoi : bulles d'un même message groupées visuellement en un seul bloc →
-// seule la première a le côté gauche arrondi (coin haut-gauche), les
-// suivantes ont le côté gauche entièrement carré pour rester collées au
-// bloc ; le côté droit reste arrondi sur toutes les bulles.
-type BubblePosition = "first" | "other";
-
-function bubbleRadiusClass(position: BubblePosition) {
-	return position === "first"
-		? "rounded-lg rounded-bl-none"
-		: "rounded-r-lg rounded-l-none";
-}
 
 function StreamingParagraph({
 	text,

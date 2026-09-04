@@ -12,6 +12,7 @@ import {
 	MessageResponse,
 } from "@/components/ai-elements/message";
 import { MessageMeta } from "@/components/ai-elements/message-meta";
+import { MessageParagraphs } from "@/components/ai-elements/message-paragraphs";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { ChatSuggestions } from "./chat-suggestions";
 
@@ -50,22 +51,33 @@ export function ChatMessageList({
 			<ConversationContent className="my-4 gap-4">
 				{messages.length === 0 && <ChatSuggestions />}
 
-				{messages.map((message) => (
-					<Message key={message.id} from={message.role}>
-						<MessageContent>
-							{message.parts.map((part) =>
-								part.type === "text" ? (
-									<MessageResponse key={message.id}>
-										{part.text}
-									</MessageResponse>
-								) : null,
+				{messages.map((message, index) => {
+					const textParts = message.parts
+						.filter((part) => part.type === "text")
+						.map((part) => part.text);
+					const isStreamingThisMessage =
+						message.role === "assistant" &&
+						index === messages.length - 1 &&
+						status === "streaming";
+
+					return (
+						<Message key={message.id} from={message.role}>
+							{message.role === "assistant" ? (
+								<MessageParagraphs
+									isStreaming={isStreamingThisMessage}
+									paragraphs={textParts}
+								/>
+							) : (
+								<MessageContent>
+									<MessageResponse>{textParts.join("")}</MessageResponse>
+								</MessageContent>
 							)}
-						</MessageContent>
-						{message.role === "assistant" && (
-							<MessageMeta name="Ramzi IA" roleLabel="Agent IA" />
-						)}
-					</Message>
-				))}
+							{message.role === "assistant" && !isStreamingThisMessage && (
+								<MessageMeta name="Ramzi IA" roleLabel="Agent IA" />
+							)}
+						</Message>
+					);
+				})}
 
 				{status === "submitted" &&
 					(isLongProcessing ? (
