@@ -53,11 +53,11 @@ function StreamingParagraph({
 	return (
 		<Card
 			className={cn(
-				"w-fit animate-in fade-in slide-in-from-bottom-2 bg-primary py-2.5 shadow-none ring-0 duration-300",
+				"w-fit animate-in fade-in slide-in-from-bottom-2 bg-secondary py-2.5 shadow-none ring-0 duration-300",
 				bubbleRadiusClass(position),
 			)}
 		>
-			<CardContent className="whitespace-pre-line px-4 text-sm text-primary-foreground">
+			<CardContent className="whitespace-pre-line px-4 text-sm text-black">
 				{streamed}
 				{!done && (
 					<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-primary-foreground/60 align-middle" />
