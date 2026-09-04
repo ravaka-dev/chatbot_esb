@@ -47,7 +47,7 @@ export function ChatMessageList({
 
 	return (
 		<Conversation className="flex-1">
-			<ConversationContent className="gap-4">
+			<ConversationContent className="my-4 gap-4">
 				{messages.length === 0 && <ChatSuggestions />}
 
 				{messages.map((message) => (

@@ -72,7 +72,7 @@ export function ChatSuggestions() {
 	const allDone = revealedCount === PARAGRAPHS.length;
 
 	return (
-		<div className="py-4">
+		<div>
 			<div className="flex flex-col gap-1">
 				{PARAGRAPHS.map((paragraph, index) => {
 					if (index > revealedCount) return null;
