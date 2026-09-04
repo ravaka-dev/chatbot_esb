@@ -32,7 +32,7 @@ export function ChatInputForm({
 	const hasContent = trimmedValue.length > 0;
 
 	return (
-		<div className="z-0">
+		<div className="z-0 px-4">
 			<PromptInput
 				globalDrop
 				onSubmit={(_, event) => {

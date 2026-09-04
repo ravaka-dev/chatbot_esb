@@ -11,6 +11,7 @@ import {
 	MessageContent,
 	MessageResponse,
 } from "@/components/ai-elements/message";
+import { MessageMeta } from "@/components/ai-elements/message-meta";
 import { Shimmer } from "@/components/ai-elements/shimmer";
 import { ChatSuggestions } from "./chat-suggestions";
 
@@ -60,6 +61,9 @@ export function ChatMessageList({
 								) : null,
 							)}
 						</MessageContent>
+						{message.role === "assistant" && (
+							<MessageMeta name="Ramzi IA" roleLabel="Agent IA" />
+						)}
 					</Message>
 				))}
 
