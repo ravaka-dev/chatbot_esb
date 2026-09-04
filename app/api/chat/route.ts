@@ -27,7 +27,9 @@ export async function POST(req: Request) {
 				writer.write({ type: "text-start", id });
 				for (const word of text.split(" ")) {
 					writer.write({ type: "text-delta", id, delta: `${word} ` });
-					await new Promise((resolve) => setTimeout(resolve, WORD_STREAM_DELAY_MS));
+					await new Promise((resolve) =>
+						setTimeout(resolve, WORD_STREAM_DELAY_MS),
+					);
 				}
 				writer.write({ type: "text-end", id });
 			};
