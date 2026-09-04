@@ -15,7 +15,7 @@ D’ailleurs, permets-moi une petite question : quel est ton rôle professionnel
 
 export function ChatSuggestions() {
 	const { text: streamedIntro, done } = useStreamedText(INTRO_TEXT, {
-		charsPerSecond: 18,
+		charsPerSecond: 25,
 	});
 
 	return (
