@@ -81,13 +81,13 @@ export function ChatMessageList({
 
 				{status === "submitted" &&
 					(isLongProcessing ? (
-						<div className="flex items-center gap-2 ms-1">
-							<Shimmer className="text-sm">Traitement en cours</Shimmer>
+						<div className="flex items-center font-semibold gap-2 ms-1">
+							<Shimmer className="text-xs">Traitement en cours</Shimmer>
 							<Loader className="size-4 animate-spin text-muted-foreground" />
 						</div>
 					) : (
-						<div className="flex gap-2 ms-1">
-							<Shimmer className="text-sm">
+						<div className="flex font-semibold gap-2 ms-1">
+							<Shimmer className="text-xs">
 								Ramzi IA est en train de repondre
 							</Shimmer>
 							<div className="flex items-center gap-1">
@@ -99,7 +99,7 @@ export function ChatMessageList({
 					))}
 
 				{error && (
-					<Shimmer className="text-sm text-destructive">
+					<Shimmer className="text-xs text-destructive">
 						Une erreur est survenue. Merci de réessayer dans un instant.
 					</Shimmer>
 				)}

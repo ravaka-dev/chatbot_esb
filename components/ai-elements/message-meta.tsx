@@ -11,7 +11,7 @@ export type MessageMetaProps = HTMLAttributes<HTMLParagraphElement> & {
 // Pourquoi : légende (émetteur • rôle) affichée sous une bulle de message assistant
 export function MessageMeta({ name, roleLabel, className, ...props }: MessageMetaProps) {
 	return (
-		<p className={cn("px-1 text-xs text-muted-foreground", className)} {...props}>
+		<p className={cn("px-1 font-semibold text-[11px] text-muted-foreground", className)} {...props}>
 			{name} • {roleLabel}
 		</p>
 	);
