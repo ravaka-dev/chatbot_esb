@@ -46,7 +46,7 @@ export function ChatTriggerButton({ open, onToggle }: ChatTriggerButtonProps) {
 							<span className="absolute inset-2 rounded-full border border-primary/40 mask-[linear-gradient(transparent,black)]" />
 
 							{open ? (
-								<span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-primary backdrop-blur-md border border-primary/50 shadow-[0_0_30px_var(--primary)]">
+								<span className="relative flex h-20 w-20 items-center justify-center rounded-full bg-primary backdrop-blur-md border border-primary/50 shadow-[0_0_30px_var(--primary)]">
 									<X className="h-6 w-6 text-white" />
 								</span>
 							) : (

@@ -58,7 +58,7 @@ export function ChatWidget() {
 			<ChatTriggerButton open={open} onToggle={() => setOpen((v) => !v)} />
 			<div
 				className={cn(
-					"fixed bottom-26 overflow-hidden right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hiddebn rounded-2xl border border-border bg-card shadow-float transition-all duration-450 sm:right-8",
+					"fixed bottom-32 overflow-hidden right-4 z-50 flex w-[calc(100vw-2rem)] max-w-100 origin-bottom-right flex-col overflow-hiddebn rounded-2xl border border-border bg-card shadow-float transition-all duration-450 sm:right-8",
 					open
 						? "pointer-events-auto translate-y-0 scale-100 opacity-100"
 						: "pointer-events-none translate-y-3 scale-95 opacity-0",
