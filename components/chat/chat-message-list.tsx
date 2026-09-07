@@ -81,15 +81,20 @@ export function ChatMessageList({
 
 				{status === "submitted" &&
 					(isLongProcessing ? (
-						<div className="flex items-center gap-2">
-							<Loader className="size-4 animate-spin text-muted-foreground" />
+						<div className="flex items-center gap-2 ms-1">
 							<Shimmer className="text-sm">Traitement en cours</Shimmer>
+							<Loader className="size-4 animate-spin text-muted-foreground" />
 						</div>
 					) : (
-						<div className="flex items-center gap-1">
-							<span className="size-3 text-primary animate-bounce rounded-full bg-current [animation-delay:-0.4s]" />
-							<span className="size-3 text-primary/80 animate-bounce rounded-full bg-current [animation-delay:-0.2s]" />
-							<span className="size-3 text-primary/60 animate-bounce rounded-full bg-current" />
+						<div className="flex gap-2 ms-1">
+							<Shimmer className="text-sm">
+								Ramzi IA est en train de repondre
+							</Shimmer>
+							<div className="flex items-center gap-1">
+								<span className="size-2 text-gray-600 animate-bounce rounded-full bg-current [animation-delay:-0.6s]" />
+								<span className="size-2 text-gray-400 animate-bounce rounded-full bg-current [animation-delay:-0.3s]" />
+								<span className="size-2 text-gray-200 animate-bounce rounded-full bg-current border" />
+							</div>
 						</div>
 					))}
 
