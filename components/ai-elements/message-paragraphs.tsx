@@ -36,7 +36,7 @@ export function MessageParagraphs({
 				return (
 					<Card
 						className={cn(
-							"w-fit animate-in fade-in slide-in-from-bottom-2 bg-secondary py-2.5 shadow-none ring-0 duration-300",
+							"w-fit animate-in fade-in slide-in-from-bottom-2 bg-secondary py-2.5 shadow-none ring-0 duration-800",
 							bubbleRadiusClass(paragraphPosition(index)),
 						)}
 						// biome-ignore lint/suspicious/noArrayIndexKey: liste strictement croissante (append-only) au fil du streaming, jamais réordonnée
@@ -45,7 +45,7 @@ export function MessageParagraphs({
 						<CardContent className="px-4 text-sm text-black">
 							<MessageResponse>{paragraph}</MessageResponse>
 							{!done && (
-								<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-primary-foreground/60 align-middle" />
+								<span className="ml-0.5 inline-block h-3 w-0.75 animate-pulse bg-primary align-middle" />
 							)}
 						</CardContent>
 					</Card>

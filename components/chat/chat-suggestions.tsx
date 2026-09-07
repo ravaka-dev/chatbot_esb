@@ -5,8 +5,8 @@ import { useEffect, useRef, useState } from "react";
 
 import { MessageMeta } from "@/components/ai-elements/message-meta";
 import {
-	bubbleRadiusClass,
 	type BubblePosition,
+	bubbleRadiusClass,
 } from "@/components/chat/paragraph-bubble";
 import { Card, CardContent } from "@/components/ui/card";
 import { useStreamedText } from "@/hooks/useStreamedText";
@@ -14,10 +14,8 @@ import { cn } from "@/lib/utils";
 
 // Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
 const PARAGRAPHS = [
-	`Bonjour! Je me présente : Ramzi, l’agent IA d’ESB Agence Numérique & IA.`,
-	`Je porte le même prénom que Ramzi, notre spécialiste numérique humain. Lui, c’est l’original… et moi, la version disponible même à 11 h le soir - en fait, 24/7! 😉`,
-	`Mon rôle est surtout de comprendre les réalités et les objectifs des entreprises afin de voir comment nous pouvons les aider à les atteindre le plus efficacement possible.`,
-	`D’ailleurs, permets-moi une petite question : quel est ton rôle professionnel actuellement?`,
+	`Bonjour ! Mon nom est Ramzi. Je suis l’agent IA d’ESB Agence Numérique + IA . `,
+	`Je vérifie à quel niveau ton entreprise sort dans Google et dans les agents IA. On regarde ça ? `,
 ];
 
 function StreamingParagraph({
@@ -52,7 +50,7 @@ function StreamingParagraph({
 			<CardContent className="whitespace-pre-line px-4 text-sm text-black">
 				{streamed}
 				{!done && (
-					<span className="ml-0.5 inline-block h-3 w-1.5 animate-pulse bg-primary-foreground/60 align-middle" />
+					<span className="ml-0.5 inline-block h-5 w-0.75 animate-pulse bg-primary align-middle" />
 				)}
 			</CardContent>
 		</Card>

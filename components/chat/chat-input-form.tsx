@@ -42,7 +42,7 @@ export function ChatInputForm({
 	const hasContent = trimmedValue.length > 0;
 
 	return (
-		<div className="z-0 px-4 py-4">
+		<div className="z-0 px-2 py-4 border-t">
 			<PromptInput
 				globalDrop
 				onSubmit={(_, event) => {

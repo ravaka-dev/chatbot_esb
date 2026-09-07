@@ -327,10 +327,10 @@ export const MessageResponse = memo(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
 
         // Design des liens
-        "[&_a]:text-white",
+        "[&_a]:text-[#383F51]",
         "[&_a]:underline",
         "[&_a]:underline-offset-2",
-        "[&_a:hover]:text-[#383F51]",
+        "[&_a:hover]:text-[#587B7F]",
 
         className,
       )}
