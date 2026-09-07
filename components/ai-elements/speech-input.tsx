@@ -59,6 +59,10 @@ declare global {
 
 type SpeechInputMode = "speech-recognition" | "media-recorder" | "none";
 
+// Pourquoi : nombre de barres du waveform généré ici, doit correspondre
+// au nombre de barres consommées par WaveformBars côté parent
+const AUDIO_LEVEL_BARS = 20;
+
 export type SpeechInputProps = ComponentProps<typeof Button> & {
 	onTranscriptionChange?: (text: string) => void;
 	/**
@@ -68,6 +72,16 @@ export type SpeechInputProps = ComponentProps<typeof Button> & {
 	 * Return the transcribed text, which will be passed to onTranscriptionChange.
 	 */
 	onAudioRecorded?: (audioBlob: Blob) => Promise<string>;
+	/**
+	 * Appelé à chaque changement d'état d'enregistrement (démarrage/arrêt).
+	 * Permet au parent d'afficher un waveform à la place de l'input pendant l'enregistrement.
+	 */
+	onListeningChange?: (isListening: boolean) => void;
+	/**
+	 * Appelé en continu pendant l'enregistrement avec les niveaux de volume
+	 * (tableau de valeurs entre 0 et 1), pour piloter un visualiseur audio.
+	 */
+	onAudioLevelChange?: (levels: number[]) => void;
 	lang?: string;
 };
 
@@ -91,6 +105,8 @@ export const SpeechInput = ({
 	className,
 	onTranscriptionChange,
 	onAudioRecorded,
+	onListeningChange,
+	onAudioLevelChange,
 	lang = "en-US",
 	...props
 }: SpeechInputProps) => {
@@ -102,15 +118,61 @@ export const SpeechInput = ({
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null);
 	const streamRef = useRef<MediaStream | null>(null);
 	const audioChunksRef = useRef<Blob[]>([]);
-	const onTranscriptionChangeRef = useRef<
-		SpeechInputProps["onTranscriptionChange"]
+	const audioContextRef = useRef<AudioContext | null>(null);
+	const analyserFrameRef = useRef<number>(0);
+	const onTranscriptionChangeRef = useRef
+		<SpeechInputProps["onTranscriptionChange"]
 	>(onTranscriptionChange);
 	const onAudioRecordedRef =
 		useRef<SpeechInputProps["onAudioRecorded"]>(onAudioRecorded);
+	const onListeningChangeRef =
+		useRef<SpeechInputProps["onListeningChange"]>(onListeningChange);
+	const onAudioLevelChangeRef =
+		useRef<SpeechInputProps["onAudioLevelChange"]>(onAudioLevelChange);
 
 	// Keep refs in sync
 	onTranscriptionChangeRef.current = onTranscriptionChange;
 	onAudioRecordedRef.current = onAudioRecorded;
+	onListeningChangeRef.current = onListeningChange;
+	onAudioLevelChangeRef.current = onAudioLevelChange;
+
+	// Pourquoi : boucle de lecture du volume, indépendante du MediaRecorder —
+	// elle tourne tant que le stream est actif et alimente onAudioLevelChange
+	const startAudioAnalysis = useCallback((stream: MediaStream) => {
+		const audioCtx = new AudioContext();
+		const source = audioCtx.createMediaStreamSource(stream);
+		const analyser = audioCtx.createAnalyser();
+		analyser.fftSize = 64;
+		source.connect(analyser);
+		audioContextRef.current = audioCtx;
+
+		const data = new Uint8Array(analyser.frequencyBinCount);
+		const step = Math.max(1, Math.floor(data.length / AUDIO_LEVEL_BARS));
+
+		const tick = () => {
+			analyser.getByteFrequencyData(data);
+			const levels = Array.from({ length: AUDIO_LEVEL_BARS }, (_, i) => {
+				const slice = data.slice(i * step, (i + 1) * step);
+				if (slice.length === 0) return 0;
+				return slice.reduce((a, b) => a + b, 0) / slice.length / 255;
+			});
+			onAudioLevelChangeRef.current?.(levels);
+			analyserFrameRef.current = requestAnimationFrame(tick);
+		};
+		tick();
+	}, []);
+
+	// Pourquoi le guard `state !== "closed"` : évite une InvalidStateError
+	// si stopAudioAnalysis est appelé deux fois (ex: cleanup au démontage
+	// PUIS l'event "stop" du MediaRecorder qui arrive juste après)
+	const stopAudioAnalysis = useCallback(() => {
+		cancelAnimationFrame(analyserFrameRef.current);
+		if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+			audioContextRef.current.close();
+		}
+		audioContextRef.current = null;
+		onAudioLevelChangeRef.current?.(new Array(AUDIO_LEVEL_BARS).fill(0));
+	}, []);
 
 	// Initialize Speech Recognition when mode is speech-recognition
 	// Pourquoi ce bloc ne s'exécute plus jamais : detectSpeechInputMode ne
@@ -131,10 +193,12 @@ export const SpeechInput = ({
 
 		const handleStart = () => {
 			setIsListening(true);
+			onListeningChangeRef.current?.(true);
 		};
 
 		const handleEnd = () => {
 			setIsListening(false);
+			onListeningChangeRef.current?.(false);
 		};
 
 		const handleResult = (event: Event) => {
@@ -159,6 +223,7 @@ export const SpeechInput = ({
 
 		const handleError = () => {
 			setIsListening(false);
+			onListeningChangeRef.current?.(false);
 		};
 
 		speechRecognition.addEventListener("start", handleStart);
@@ -180,7 +245,7 @@ export const SpeechInput = ({
 		};
 	}, [mode, lang]);
 
-	// Cleanup MediaRecorder and stream on unmount
+	// Cleanup MediaRecorder, stream et analyse audio au démontage
 	useEffect(
 		() => () => {
 			if (mediaRecorderRef.current?.state === "recording") {
@@ -191,8 +256,9 @@ export const SpeechInput = ({
 					track.stop();
 				}
 			}
+			stopAudioAnalysis();
 		},
-		[],
+		[stopAudioAnalysis],
 	);
 
 	// Start MediaRecorder recording
@@ -204,6 +270,8 @@ export const SpeechInput = ({
 		try {
 			const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 			streamRef.current = stream;
+			startAudioAnalysis(stream);
+
 			const mediaRecorder = new MediaRecorder(stream);
 			audioChunksRef.current = [];
 
@@ -214,6 +282,7 @@ export const SpeechInput = ({
 			};
 
 			const handleStop = async () => {
+				stopAudioAnalysis();
 				for (const track of stream.getTracks()) {
 					track.stop();
 				}
@@ -239,7 +308,9 @@ export const SpeechInput = ({
 			};
 
 			const handleError = () => {
+				stopAudioAnalysis();
 				setIsListening(false);
+				onListeningChangeRef.current?.(false);
 				for (const track of stream.getTracks()) {
 					track.stop();
 				}
@@ -253,10 +324,11 @@ export const SpeechInput = ({
 			mediaRecorderRef.current = mediaRecorder;
 			mediaRecorder.start();
 			setIsListening(true);
+			onListeningChangeRef.current?.(true);
 		} catch {
 			setIsListening(false);
 		}
-	}, []);
+	}, [startAudioAnalysis, stopAudioAnalysis]);
 
 	// Stop MediaRecorder recording
 	const stopMediaRecorder = useCallback(() => {
@@ -264,6 +336,7 @@ export const SpeechInput = ({
 			mediaRecorderRef.current.stop();
 		}
 		setIsListening(false);
+		onListeningChangeRef.current?.(false);
 	}, []);
 
 	const toggleListening = useCallback(() => {
@@ -306,7 +379,7 @@ export const SpeechInput = ({
 
 			{/* Main record button */}
 			<Button
-			type="button"
+				type="button"
 				className={cn(
 					"relative z-10 rounded-full transition-all duration-300",
 					isListening
