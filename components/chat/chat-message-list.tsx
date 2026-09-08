@@ -24,7 +24,7 @@ interface ChatMessageListProps {
 	error: Error | undefined;
 }
 
-const LONG_PROCESSING_DELAY = 15000;
+const LONG_PROCESSING_DELAY = 20000;
 
 export function ChatMessageList({
 	messages,
