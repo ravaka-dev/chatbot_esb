@@ -39,17 +39,16 @@ export function MessageParagraphs({
 							"w-fit animate-in fade-in slide-in-from-bottom-2 bg-secondary py-2.5 shadow-none ring-0 duration-500",
 							bubbleRadiusClass(paragraphPosition(index)),
 						)}
-						// biome-ignore lint/suspicious/noArrayIndexKey: liste strictement croissante (append-only) au fil du streaming, jamais réordonnée
 						key={index}
 					>
 						<CardContent className="px-4 text-sm text-black">
-  <div className="inline">
-    <MessageResponse>{paragraph}</MessageResponse>
-    {!done && (
-      <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-primary align-middle" />
-    )}
-  </div>
-</CardContent>
+							<div className="flex">
+								<MessageResponse>{paragraph}</MessageResponse>
+								{!done && (
+								<span className="ml-0.5 h-4 w-0.5 bg-primary align-middle" />
+								)}
+							</div>
+						</CardContent>
 					</Card>
 				);
 			})}

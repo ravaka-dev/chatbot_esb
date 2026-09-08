@@ -14,6 +14,7 @@ import {
 import { MessageMeta } from "@/components/ai-elements/message-meta";
 import { MessageParagraphs } from "@/components/ai-elements/message-paragraphs";
 import { Shimmer } from "@/components/ai-elements/shimmer";
+import { useBrowserPadding } from "@/hooks/useBrowserPadding";
 import { ChatSuggestions } from "./chat-suggestions";
 
 type ChatStatus = "submitted" | "streaming" | "ready" | "error";
@@ -32,6 +33,10 @@ export function ChatMessageList({
 	error,
 }: ChatMessageListProps) {
 	const [isLongProcessing, setIsLongProcessing] = useState(false);
+	const _padding = useBrowserPadding({
+		chrome: "0",
+		default: "4",
+	});
 
 	useEffect(() => {
 		if (status !== "submitted") {
@@ -48,7 +53,7 @@ export function ChatMessageList({
 
 	return (
 		<Conversation className="flex-1">
-			<ConversationContent className="my-4 gap-4">
+			<ConversationContent className={`my-4 mx-${_padding} gap-4`}>
 				{messages.length === 0 && <ChatSuggestions />}
 
 				{messages.map((message, index) => {
@@ -81,12 +86,12 @@ export function ChatMessageList({
 
 				{status === "submitted" &&
 					(isLongProcessing ? (
-						<div className="flex items-center font-semibold gap-2 ms-1">
+						<div className="flex itemp-center font-semibold gap-2">
 							<Shimmer className="text-xs">Traitement en cours</Shimmer>
 							<Loader className="size-4 animate-spin text-muted-foreground" />
 						</div>
 					) : (
-						<div className="flex font-semibold gap-2 ms-1">
+						<div className="flex font-semibold gap-2">
 							<Shimmer className="text-xs">
 								Ramzi IA est en train de d'écrire
 							</Shimmer>
