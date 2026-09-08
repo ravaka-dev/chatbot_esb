@@ -42,12 +42,14 @@ export function MessageParagraphs({
 						// biome-ignore lint/suspicious/noArrayIndexKey: liste strictement croissante (append-only) au fil du streaming, jamais réordonnée
 						key={index}
 					>
-						<CardContent className="px-4 text-sm flex text-black">
-							<MessageResponse>{paragraph}</MessageResponse>
-							{!done && (
-								<span className="ml-0.5 h-4 w-0.5 animate-pulse bg-primary/80 align-middle" />
-							)}
-						</CardContent>
+						<CardContent className="px-4 text-sm text-black">
+  <div className="inline">
+    <MessageResponse>{paragraph}</MessageResponse>
+    {!done && (
+      <span className="ml-0.5 inline-block h-4 w-0.5 animate-pulse bg-primary align-middle" />
+    )}
+  </div>
+</CardContent>
 					</Card>
 				);
 			})}
