@@ -24,7 +24,7 @@ interface ChatMessageListProps {
 	error: Error | undefined;
 }
 
-const LONG_PROCESSING_DELAY = 10000;
+const LONG_PROCESSING_DELAY = 15000;
 
 export function ChatMessageList({
 	messages,
@@ -88,7 +88,7 @@ export function ChatMessageList({
 					) : (
 						<div className="flex font-semibold gap-2 ms-1">
 							<Shimmer className="text-xs">
-								Ramzi IA est en train de repondre
+								Ramzi IA est en train de d'écrire
 							</Shimmer>
 							<div className="flex items-center gap-1">
 								<span className="size-2 text-gray-600 animate-bounce rounded-full bg-current [animation-delay:-0.6s]" />

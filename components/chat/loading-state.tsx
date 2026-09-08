@@ -15,7 +15,7 @@ function LoadingState({ status }: LoadingStateProps) {
 					<AvatarImage src={Ramzi.src} alt="Ramzi IA" />
 					<AvatarFallback>R</AvatarFallback>
 				</Avatar>
-				<Shimmer className="text-xs">Ramzi IA est en train de répondre</Shimmer>
+				<Shimmer className="text-xs">Ramzi IA est en train d'écrire</Shimmer>
 			</div>
 		)
 	);
