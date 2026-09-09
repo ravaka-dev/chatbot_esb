@@ -1,5 +1,5 @@
 import type { UIMessage } from "ai";
-import { Loader } from "lucide-react";
+import { Loader, LoaderCircle } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
 	Conversation,
@@ -106,12 +106,9 @@ export function ChatMessageList({
 				{status === "submitted" &&
 					waiting &&
 					(waiting.level === 3 ? (
-						<div className="flex flex-col gap-1">
-							{waiting.paragraphs.map((paragraph) => (
-								<Shimmer className="text-xs font-semibold" key={paragraph}>
-									{paragraph}
-								</Shimmer>
-							))}
+						<div className="flex items-center font-semibold gap-2">
+							<Shimmer className="text-xs">{waiting.paragraphs[0]}</Shimmer>
+							<LoaderCircle className="size-4 animate-spin text-muted-foreground" />
 						</div>
 					) : waiting.level === 2 ? (
 						<div className="flex items-center font-semibold gap-2">
