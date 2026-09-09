@@ -16,28 +16,25 @@ export async function POST(req: NextRequest) {
 	}
 
 	const transcriptionFormData = new FormData();
-	// Pourquoi : l'API a besoin d'un nom de fichier avec extension pour
-	// déduire le format audio, sinon elle peut rejeter le blob
 	transcriptionFormData.append("file", audioFile, "audio.webm");
-	// Pourquoi "voxtral-mini-latest" : c'est le seul modèle exposé par
-	// l'endpoint de transcription de Mistral (routé en interne vers
-	// Voxtral Mini Transcribe), optimisé pour le coût et la latence
-	transcriptionFormData.append("model", "voxtral-mini-latest");
-	// Pourquoi : on force le français plutôt que de laisser le modèle
-	// détecter la langue, plus fiable pour de courts extraits vocaux
+	transcriptionFormData.append("model", "gpt-4o-transcribe");
 	transcriptionFormData.append("language", "fr");
+	transcriptionFormData.append(
+		"prompt",
+		"Transcription en français québécois/canadien. Dans une adresse courriel dictée, « a commercial », « à commercial » ou « arobase » désignent le symbole @, et « point » désigne un point. Exemple : jean point tremblay à commercial gmail point com.",
+	);
 
 	let response: Response;
 	try {
-		response = await fetch("https://api.mistral.ai/v1/audio/transcriptions", {
+		response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
 			method: "POST",
 			headers: {
-				Authorization: `Bearer ${process.env.MISTRAL_API_KEY}`,
+				Authorization: `Bearer ${process.env.OPENAI_KEY}`,
 			},
 			body: transcriptionFormData,
 		});
 	} catch (err) {
-		console.error("[/api/transcribe] appel Mistral impossible :", err);
+		console.error("[/api/transcribe] appel OpenAI impossible :", err);
 		return NextResponse.json(
 			{ error: "Service de transcription injoignable" },
 			{ status: 502 },
@@ -46,13 +43,12 @@ export async function POST(req: NextRequest) {
 
 	if (!response.ok) {
 		const errorBody = await response.text();
-		console.error("[/api/transcribe] erreur Mistral :", errorBody);
+		console.error("[/api/transcribe] erreur OpenAI :", errorBody);
 		return NextResponse.json(
 			{ error: "Échec de la transcription" },
 			{ status: 502 },
 		);
 	}
-
 	const { text } = (await response.json()) as { text: string };
-	return NextResponse.json({ text });
+	return NextResponse.json({ text: text });
 }
