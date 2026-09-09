@@ -66,9 +66,14 @@ export function ChatMessageList({
 		<Conversation className="flex-1">
 			<ConversationContent className={`my-4 mx-${_padding} gap-4`}>
 				{messages.length === 0 ? (
-					<ChatSuggestions isAnimated />
+					// Pourquoi une key distincte : sans elle, React réutilise la même
+					// instance entre les deux branches (même position dans l'arbre) et
+					// `revealedCount` (initialisé une seule fois au montage) reste figé
+					// à sa valeur précédente — les paragraphes ne se révèlent plus un
+					// par un après un effacement de la conversation
+					<ChatSuggestions isAnimated key="suggestions-animated" />
 				) : (
-					<ChatSuggestions isAnimated={false} />
+					<ChatSuggestions isAnimated={false} key="suggestions-static" />
 				)}
 
 				{messages.map((message, index) => {
