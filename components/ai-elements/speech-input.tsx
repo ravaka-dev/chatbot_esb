@@ -1,8 +1,14 @@
 "use client";
 
 import { MicIcon, SquareIcon } from "lucide-react";
-import type { ComponentProps } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import type { ComponentProps, Ref } from "react";
+import {
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useRef,
+	useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
@@ -63,7 +69,7 @@ type SpeechInputMode = "speech-recognition" | "media-recorder" | "none";
 // au nombre de barres consommées par WaveformBars côté parent
 const AUDIO_LEVEL_BARS = 20;
 
-export type SpeechInputProps = ComponentProps<typeof Button> & {
+export type SpeechInputProps = Omit<ComponentProps<typeof Button>, "ref"> & {
 	onTranscriptionChange?: (text: string) => void;
 	/**
 	 * Callback for when audio is recorded using MediaRecorder fallback.
@@ -83,7 +89,13 @@ export type SpeechInputProps = ComponentProps<typeof Button> & {
 	 */
 	onAudioLevelChange?: (levels: number[]) => void;
 	lang?: string;
+	ref?: Ref<SpeechInputHandle>;
 };
+
+export interface SpeechInputHandle {
+	/** Annule l'enregistrement en cours : arrête le micro sans transcrire l'audio. */
+	cancel: () => void;
+}
 
 const detectSpeechInputMode = (): SpeechInputMode => {
 	if (typeof window === "undefined") {
@@ -108,6 +120,7 @@ export const SpeechInput = ({
 	onListeningChange,
 	onAudioLevelChange,
 	lang = "en-US",
+	ref,
 	...props
 }: SpeechInputProps) => {
 	const [isListening, setIsListening] = useState(false);
@@ -120,6 +133,9 @@ export const SpeechInput = ({
 	const audioChunksRef = useRef<Blob[]>([]);
 	const audioContextRef = useRef<AudioContext | null>(null);
 	const analyserFrameRef = useRef<number>(0);
+	// Pourquoi : indique à handleStop d'ignorer l'audio capturé (annulation),
+	// plutôt que de l'envoyer à la transcription
+	const isCancelledRef = useRef(false);
 	const onTranscriptionChangeRef = useRef
 		<SpeechInputProps["onTranscriptionChange"]
 	>(onTranscriptionChange);
@@ -288,6 +304,14 @@ export const SpeechInput = ({
 				}
 				streamRef.current = null;
 
+				const wasCancelled = isCancelledRef.current;
+				isCancelledRef.current = false;
+
+				if (wasCancelled) {
+					audioChunksRef.current = [];
+					return;
+				}
+
 				const audioBlob = new Blob(audioChunksRef.current, {
 					type: "audio/webm",
 				});
@@ -331,7 +355,8 @@ export const SpeechInput = ({
 	}, [startAudioAnalysis, stopAudioAnalysis]);
 
 	// Stop MediaRecorder recording
-	const stopMediaRecorder = useCallback(() => {
+	const stopMediaRecorder = useCallback((cancel = false) => {
+		isCancelledRef.current = cancel;
 		if (mediaRecorderRef.current?.state === "recording") {
 			mediaRecorderRef.current.stop();
 		}
@@ -354,6 +379,20 @@ export const SpeechInput = ({
 			}
 		}
 	}, [mode, isListening, startMediaRecorder, stopMediaRecorder]);
+
+	useImperativeHandle(
+		ref,
+		() => ({
+			cancel: () => {
+				if (mode === "media-recorder" && isListening) {
+					stopMediaRecorder(true);
+				} else if (mode === "speech-recognition" && recognitionRef.current) {
+					recognitionRef.current.stop();
+				}
+			},
+		}),
+		[mode, isListening, stopMediaRecorder],
+	);
 
 	// Determine if button should be disabled
 	const isDisabled =

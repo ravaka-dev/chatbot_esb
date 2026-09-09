@@ -14,8 +14,8 @@ import { cn } from "@/lib/utils";
 
 // Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
 const PARAGRAPHS = [
-	`Bonjour ! Mon nom est Ramzi. Je suis l’agent IA d’ESB Agence Numérique + IA . `,
-	`Je vérifie à quel niveau ton entreprise sort dans Google et dans les agents IA. On regarde ça ? `,
+	`Bonjour ! Mon nom est  Ramzi IA l’agent virtuel  d’ESB Agence Numérique + IA`,
+	`Je vérifie à quel niveau ton entreprise sort dans Google et dans les agents IA. Qu’en dis-tu que je regarde cela ? Comme tu le sais, c’est un must pour être vu par tes prospects ou futurs candidats.`,
 ];
 
 function StreamingParagraph({
@@ -57,30 +57,64 @@ function StreamingParagraph({
 	);
 }
 
-export function ChatSuggestions() {
-	const [revealedCount, setRevealedCount] = useState(0);
+// Pourquoi : composant séparé pour l'affichage statique — MessageParagraphs
+// gère le streaming au niveau serveur, pas l'effet de frappe caractère par
+// caractère utilisé ici, donc on garde une bulle simple sans animation
+function StaticParagraphs({ paragraphs }: { paragraphs: string[] }) {
+	return (
+		<div className="flex flex-col gap-1">
+			{paragraphs.map((paragraph, index) => (
+				<Card
+					className={cn(
+						"w-fit bg-secondary py-2.5 shadow-none ring-0",
+						bubbleRadiusClass(index === 0 ? "first" : "other"),
+					)}
+					key={paragraph}
+				>
+					<CardContent className="whitespace-pre-line px-4 text-sm text-black">
+						{paragraph}
+					</CardContent>
+				</Card>
+			))}
+		</div>
+	);
+}
+
+interface ChatSuggestionsProps {
+	/** false : les paragraphes s'affichent directement, sans effet de frappe */
+	isAnimated?: boolean;
+}
+
+export function ChatSuggestions({ isAnimated = true }: ChatSuggestionsProps) {
+	const [revealedCount, setRevealedCount] = useState(
+		isAnimated ? 0 : PARAGRAPHS.length,
+	);
 	const allDone = revealedCount === PARAGRAPHS.length;
 
 	return (
 		<div>
-			<div className="flex flex-col gap-1">
-				{PARAGRAPHS.map((paragraph, index) => {
-					if (index > revealedCount) return null;
+			{isAnimated ? (
+				<div className="flex flex-col gap-1">
+					{PARAGRAPHS.map((paragraph, index) => {
+						if (index > revealedCount) return null;
 
-					const position: BubblePosition = index === 0 ? "first" : "other";
+						const position: BubblePosition = index === 0 ? "first" : "other";
 
-					return (
-						<StreamingParagraph
-							key={paragraph}
-							position={position}
-							text={paragraph}
-							onDone={() =>
-								setRevealedCount((count) => Math.max(count, index + 1))
-							}
-						/>
-					);
-				})}
-			</div>
+						return (
+							<StreamingParagraph
+								key={paragraph}
+								position={position}
+								text={paragraph}
+								onDone={() =>
+									setRevealedCount((count) => Math.max(count, index + 1))
+								}
+							/>
+						);
+					})}
+				</div>
+			) : (
+				<StaticParagraphs paragraphs={PARAGRAPHS} />
+			)}
 			{allDone && (
 				<MessageMeta
 					className="animate-in fade-in duration-300"
