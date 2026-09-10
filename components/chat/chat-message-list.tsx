@@ -122,11 +122,10 @@ export function ChatMessageList({
 						</div>
 					) : (
 						<div className="flex font-semibold gap-2">
-							<Shimmer className="text-xs">{waiting.paragraphs[0]}</Shimmer>
 							<div className="flex items-center gap-1">
-								<span className="size-2 text-gray-600 animate-bounce rounded-full bg-current [animation-delay:-0.6s]" />
-								<span className="size-2 text-gray-400 animate-bounce rounded-full bg-current [animation-delay:-0.3s]" />
-								<span className="size-2 text-gray-200 animate-bounce rounded-full bg-current border" />
+								<span className="size-2.5 text-gray-600 animate-bounce rounded-full bg-current [animation-delay:-0.4s]" />
+								<span className="size-2.5 text-gray-400 animate-bounce rounded-full bg-current [animation-delay:-0.2s]" />
+								<span className="size-2.5 text-gray-200 animate-bounce rounded-full bg-current border" />
 							</div>
 						</div>
 					))}
