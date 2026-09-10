@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 	transcriptionFormData.append("language", "fr");
 	transcriptionFormData.append(
 		"prompt",
-		"Transcription en français québécois/canadien. Dans une adresse courriel dictée, « a commercial », « à commercial » ou « arobase » désignent le symbole @, et « point » désigne un point. Exemple : jean point tremblay à commercial gmail point com.",
+		"Transcription en français québécois. Transcris les adresses courriel avec les symboles réels. « a commercial », « à commercial », « at » et « arobase » deviennent @ ; « point » devient un point (.) ; « tiret » devient - ; « souligné » ou « tiret bas » deviennent _ ; « tout attaché » signifie sans espaces. Exemples : « jean point tremblay à commercial gmail point com » → jean.tremblay@gmail.com ; « marie tiret jose arobase hydro point qc point ca » → marie-jose@hydro.qc.ca.",
 	);
 
 	let response: Response;

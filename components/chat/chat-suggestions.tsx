@@ -15,7 +15,8 @@ import { cn } from "@/lib/utils";
 // Pourquoi : défini hors du composant → référence stable, l'effet ne redémarre pas à chaque re-render
 const PARAGRAPHS = [
 	`Bonjour ! Mon nom est  Ramzi IA l’agent virtuel  d’ESB Agence Numérique + IA`,
-	`Je vérifie à quel niveau ton entreprise sort dans Google et dans les agents IA. Qu’en dis-tu que je regarde cela ? Comme tu le sais, c’est un must pour être vu par tes prospects ou futurs candidats.`,
+	`Je vérifie à quel niveau ton entreprise sort dans Google et dans les agents IA.`,
+	` Qu’en dis-tu que je regarde cela ? Comme tu le sais, c’est un must pour être vu par tes prospects ou futurs candidats.`,
 ];
 
 function StreamingParagraph({
