@@ -41,8 +41,15 @@ export async function POST(req: Request) {
 					throw new Error(`Erreur lors de l'appel à n8n: ${response.status}`);
 				}
 
-				type N8nResponse = { message: string[] };
+				type N8nResponse = { message: string[]; relance_autorisee?: boolean };
 				const data: N8nResponse = await response.json();
+
+				// Pourquoi : transmis au client pour que useRelance sache si n8n a
+				// déjà signalé d'arrêter les relances (ex: rendez-vous confirmé)
+				writer.write({
+					messageMetadata: { relanceAutorisee: data.relance_autorisee !== false },
+					type: "message-metadata",
+				});
 
 				streamParagraphs(data.message);
 			} catch (error) {

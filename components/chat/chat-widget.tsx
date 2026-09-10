@@ -4,6 +4,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useMemo, useState } from "react";
 import { useAutoFocus } from "@/hooks/useAutoFocus";
+import { useRelance } from "@/hooks/useRelance";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
 import { useChatPersistence } from "../../hooks/useChatPersistence";
@@ -30,6 +31,25 @@ export function ChatWidget() {
 	const { clear } = useChatPersistence(STORAGE_KEY, messages, setMessages);
 	const { inputRef, focusInput } = useAutoFocus<HTMLInputElement>(open, status);
 	const isBusy = status === "submitted" || status === "streaming";
+
+	useRelance({
+		draftValue: input,
+		enabled: open,
+		messages,
+		onRelance: (paragraphs) => {
+			setMessages((prev) => [
+				...prev,
+				{
+					id: crypto.randomUUID(),
+					metadata: { relance: true },
+					parts: paragraphs.map((text) => ({ text, type: "text" as const })),
+					role: "assistant" as const,
+				},
+			]);
+		},
+		sessionId,
+		status,
+	});
 
 	useEffect(() => {
 		const timer = setTimeout(() => setOpen(true), 200);
