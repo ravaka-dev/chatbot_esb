@@ -14,7 +14,6 @@ import {
 import { MessageMeta } from "@/components/ai-elements/message-meta";
 import { MessageParagraphs } from "@/components/ai-elements/message-paragraphs";
 import { Shimmer } from "@/components/ai-elements/shimmer";
-import { useBrowserPadding } from "@/hooks/useBrowserPadding";
 import { useWaitingMessage } from "@/hooks/useWaitingMessage";
 import { ChatSuggestions } from "./chat-suggestions";
 
@@ -31,10 +30,6 @@ export function ChatMessageList({
 	status,
 	error,
 }: ChatMessageListProps) {
-	const _padding = useBrowserPadding({
-		chrome: "0",
-		default: "4",
-	});
 	const waiting = useWaitingMessage(status === "submitted");
 	const [animatedMessageId, setAnimatedMessageId] = useState<string | null>(
 		null,
@@ -64,7 +59,7 @@ export function ChatMessageList({
 
 	return (
 		<Conversation className="flex-1">
-			<ConversationContent className={`my-4 mx-${_padding} gap-4`}>
+			<ConversationContent className={`my-4 px-4 gap-4`}>
 				{messages.length === 0 ? (
 					// Pourquoi une key distincte : sans elle, React réutilise la même
 					// instance entre les deux branches (même position dans l'arbre) et
