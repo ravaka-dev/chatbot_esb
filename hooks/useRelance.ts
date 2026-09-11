@@ -35,9 +35,7 @@ const getMetadata = (message: UIMessage): RelanceMetadata =>
 	(message.metadata as RelanceMetadata | undefined) ?? {};
 
 const paragraphsOf = (message: UIMessage) =>
-	message.parts
-		.filter((part) => part.type === "text")
-		.map((part) => part.text);
+	message.parts.filter((part) => part.type === "text").map((part) => part.text);
 
 // Pourquoi : relance le prospect inactif via le même webhook n8n que le chat
 // (type: "relance", voir app/api/relance/route.ts) — n8n ne peut pas pousser
@@ -119,7 +117,8 @@ export function useRelance({
 			if (paragraphs.length > 0) {
 				onRelanceRef.current(paragraphs);
 				historiqueRef.current.push(...paragraphs);
-				derniereBulleRef.current = paragraphs.at(-1) ?? derniereBulleRef.current;
+				derniereBulleRef.current =
+					paragraphs.at(-1) ?? derniereBulleRef.current;
 			}
 			autoriseeRef.current =
 				data.relance_autorisee !== false && data.stop !== true;
@@ -167,9 +166,11 @@ export function useRelance({
 			lastRealAssistantIdRef.current = lastRealAssistant.id;
 			const paragraphs = paragraphsOf(lastRealAssistant);
 			if (paragraphs.length > 0) {
-				derniereBulleRef.current = paragraphs.at(-1) ?? derniereBulleRef.current;
+				derniereBulleRef.current =
+					paragraphs.at(-1) ?? derniereBulleRef.current;
 			}
-			autoriseeRef.current = getMetadata(lastRealAssistant).relanceAutorisee !== false;
+			autoriseeRef.current =
+				getMetadata(lastRealAssistant).relanceAutorisee !== false;
 		}
 	}, [messages]);
 

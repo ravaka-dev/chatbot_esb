@@ -47,7 +47,9 @@ export async function POST(req: Request) {
 				// Pourquoi : transmis au client pour que useRelance sache si n8n a
 				// déjà signalé d'arrêter les relances (ex: rendez-vous confirmé)
 				writer.write({
-					messageMetadata: { relanceAutorisee: data.relance_autorisee !== false },
+					messageMetadata: {
+						relanceAutorisee: data.relance_autorisee !== false,
+					},
 					type: "message-metadata",
 				});
 
