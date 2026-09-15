@@ -125,7 +125,15 @@ export const SpeechInput = ({
 }: SpeechInputProps) => {
 	const [isListening, setIsListening] = useState(false);
 	const [isProcessing, setIsProcessing] = useState(false);
-	const [mode] = useState<SpeechInputMode>(detectSpeechInputMode);
+	// Pourquoi useState + useEffect plutôt qu'un lazy initializer : le lazy
+	// initializer tourne aussi au premier rendu client (avant hydratation),
+	// ce qui produit "media-recorder" côté client contre "none" côté serveur
+	// et casse l'hydratation. On force donc "none" aux deux premiers rendus.
+	const [mode, setMode] = useState<SpeechInputMode>("none");
+
+	useEffect(() => {
+		setMode(detectSpeechInputMode());
+	}, []);
 	const [isRecognitionReady, setIsRecognitionReady] = useState(false);
 	const recognitionRef = useRef<SpeechRecognition | null>(null);
 	const mediaRecorderRef = useRef<MediaRecorder | null>(null);

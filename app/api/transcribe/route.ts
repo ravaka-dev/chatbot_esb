@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 	transcriptionFormData.append("language", "fr");
 	transcriptionFormData.append(
 		"prompt",
-		"Transcription en français québécois. Transcris les adresses courriel avec les symboles réels. « a commercial », « à commercial », « at » et « arobase » deviennent @ ; « point » devient un point (.) ; « tiret » devient - ; « souligné » ou « tiret bas » deviennent _ ; « tout attaché » signifie sans espaces. Exemples : « jean point tremblay à commercial gmail point com » → jean.tremblay@gmail.com ; « marie tiret jose arobase hydro point qc point ca » → marie-jose@hydro.qc.ca.",
+		"Transcription en français québécois. Transcris les adresses courriel avec les symboles réels. « a commercial », « à commercial », « at » et « arobase » deviennent @ ; « point » devient un point (.) ; « tiret » devient - ; « souligné » ou « tiret bas » deviennent _ ; « tout attaché » signifie sans espaces.N'invente pas si l'utilisateur ne dit rien , retourne un espace vide.",
 	);
 
 	let response: Response;
