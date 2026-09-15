@@ -3,7 +3,7 @@
 import type { UIMessage } from "ai";
 import { useCallback, useEffect, useRef } from "react";
 
-const RELANCE_DELAYS_MS = [15000, 30000, 60000];
+const RELANCE_DELAYS_MS = [20000, 35000, 60000];
 const HISTORIQUE_MAX = 20;
 
 export type ChatStatus = "submitted" | "streaming" | "ready" | "error";
