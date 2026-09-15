@@ -30,7 +30,6 @@ export function ChatWidget() {
 
 	const { clear } = useChatPersistence(STORAGE_KEY, messages, setMessages);
 	const { inputRef, focusInput } = useAutoFocus<HTMLInputElement>(open, status);
-	const isBusy = status === "submitted" || status === "streaming";
 
 	useRelance({
 		draftValue: input,
@@ -60,7 +59,7 @@ export function ChatWidget() {
 
 	const send = (text: string) => {
 		const value = text.trim();
-		if (!value || isBusy) return;
+		if (!value) return;
 		setInput("");
 		void sendMessage({ text: value });
 		focusInput();
@@ -93,8 +92,6 @@ export function ChatWidget() {
 					value={input}
 					onChange={setInput}
 					onSubmit={() => send(input)}
-					status={status}
-					isBusy={isBusy}
 					inputRef={inputRef}
 				/>
 			</div>

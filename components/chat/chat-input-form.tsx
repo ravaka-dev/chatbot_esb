@@ -18,16 +18,12 @@ import { WaveformBars } from "@/components/chat/waveform-bars";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type ChatStatus = "submitted" | "streaming" | "ready" | "error";
-
 const AUDIO_LEVEL_BARS = 20;
 
 interface ChatInputFormProps {
 	value: string;
 	onChange: (value: string) => void;
 	onSubmit: () => void;
-	status: ChatStatus;
-	isBusy: boolean;
 	inputRef: RefObject<HTMLInputElement | null>;
 }
 
@@ -35,8 +31,6 @@ export function ChatInputForm({
 	value,
 	onChange,
 	onSubmit,
-	status,
-	isBusy,
 	inputRef,
 }: ChatInputFormProps) {
 	const [isRecording, setIsRecording] = useState(false);
@@ -78,7 +72,6 @@ export function ChatInputForm({
 						<SpeechInput
 							ref={speechInputRef}
 							lang="fr-FR"
-							disabled={isBusy}
 							variant="ghost"
 							size="icon"
 							className="text-white size-10 hover:bg-primary/80"
@@ -127,8 +120,7 @@ export function ChatInputForm({
 					{!isRecording && (
 						<PromptInputSubmit
 							className="order-3 text-primary size-10 bg-transparent hover:bg-transparent"
-							status={status}
-							disabled={!trimmedValue || isBusy}
+							disabled={!trimmedValue}
 						/>
 					)}
 				</PromptInputBody>
